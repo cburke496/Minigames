@@ -24,22 +24,57 @@ var minigames = function() {
 		var player = document.createElementNS("http://www.w3.org/2000/svg","circle");
 		var radius = 6;
 		player.setAttribute('r', radius);
-		player.setAttribute('cx', Minigames.width/2);
-		player.setAttribute('cy', Minigames.height - radius);
+		player.setAttribute('cx', radius);
+		player.setAttribute('cy', Minigames.height/2);
 		Minigames.svg.appendChild(player);
+
+		var pellets = [];
+		for(var i = 0; i < 20; i++) {
+		    var pellet = document.createElementNS("http://www.w3.org/2000/svg","circle");
+		    var pradius = 3;
+		    pellet.setAttribute('r', pradius);
+		    pellet.setAttribute('cx',Math.random()*(Minigames.width-2*pradius) + pradius);
+		    pellet.setAttribute('cy',Math.random()*(Minigames.height-2*pradius) + pradius);
+		    pellet.setAttribute('fill',"#0000ff");
+		    pellet.setAttribute('stroke',"#0055ff");
+		    pellet.setAttribute('stroke-width',2);
+		    Minigames.svg.appendChild(pellet);
+		    pellets.push(pellet);
+		}
+
+		var currentPoints = 0;
 
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
-		    if(key === 37) {
-			player.setAttribute('cx',parseInt(player.getAttribute('cx'))-5);
+		    if(key === 38) {
+			player.setAttribute('cy',parseInt(player.getAttribute('cy'))-5);
 		    }
-		    if(key === 39) {
-			player.setAttribute('cx',parseInt(player.getAttribute('cx'))+5);
+		    if(key === 40) {
+			player.setAttribute('cy',parseInt(player.getAttribute('cy'))+5);
 		    }
 
-		    player.setAttribute('cy',player.getAttribute('cy')-1);
+		    player.setAttribute('cx',parseInt(player.getAttribute('cx'))+2);
 		    
-		    if(player.getAttribute('cy') > radius) {
+		    var plen = pellets.length;
+		    for(var i = plen; i > 0; i--) {
+			if(Math.pow(pellets[i-1].getAttribute('cx')-player.getAttribute('cx'),2) + Math.pow(pellets[i-1].getAttribute('cy')-player.getAttribute('cy'),2) < Math.pow(radius + pradius,2)) {
+			    currentPoints++;
+			    Minigames.svg.removeChild(pellets[i-1]);
+			    pellets.splice(i-1,1)
+			}
+		    }
+
+		    var pointsText = document.createElement("p");
+		    Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
+		    Minigames.body.appendChild(pointsText);
+		    pointsText.appendChild(document.createTextNode("Points for this Game: "));
+		    pointsText.appendChild(document.createTextNode(currentPoints));
+		    pointsText.style.setProperty("padding-left","1em");
+		    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
+		    pointsText.style.setProperty("font-size", "18px");
+
+
+		    if(player.getAttribute('cx') < Minigames.width - radius) {
 			try {
 			    window.requestAnimationFrame(animloop);
 			} catch (err) {
@@ -47,6 +82,12 @@ var minigames = function() {
 			}
 		    } else {
 			Minigames.svg.removeChild(player);
+			var plen = pellets.length;
+			for(var i = plen; i > 0; i--) {
+			    Minigames.svg.removeChild(pellets[i-1]);
+			}
+			Minigames.points += currentPoints;
+			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
 			Minigames.menu();
 		    }
 		};
@@ -153,8 +194,8 @@ var minigames = function() {
 	    for(var i = 0; i < len; i++) {
 		this.svg.removeChild(children[0]);
 	    }
-	    var totalPoints = document.getElementsByTagName("p")[0];
-	    this.body.removeChild(totalPoints);
+	    //var totalPoints = document.getElementsByTagName("p")[0];
+	    //this.body.removeChild(totalPoints);
 	}
     };
 };
@@ -172,5 +213,5 @@ window.addEventListener("keydown", function(e) {
 
 window.addEventListener("keyup", function(e) {
     var index = Minigames.currentKeys.indexOf(e.keyCode);
-    Minigames.currentKeys.splice(index,index+1);
+    Minigames.currentKeys.splice(index,1);
 });

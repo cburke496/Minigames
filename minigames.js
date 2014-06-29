@@ -15,6 +15,9 @@ var minigames = function() {
     //the games array
 	games:[],
 
+    //Stores the key currently being pressed
+	currentKeys:[],
+
     //This is where the code for each game is made and then stored in the array
 	setup:function() {
 	    var game1 = function() {
@@ -26,9 +29,16 @@ var minigames = function() {
 		Minigames.svg.appendChild(player);
 
 		var animloop = function() {
-		    console.log("loop");
+		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+		    if(key === 37) {
+			player.setAttribute('cx',parseInt(player.getAttribute('cx'))-5);
+		    }
+		    if(key === 39) {
+			player.setAttribute('cx',parseInt(player.getAttribute('cx'))+5);
+		    }
+
 		    player.setAttribute('cy',player.getAttribute('cy')-1);
-		
+		    
 		    if(player.getAttribute('cy') > radius) {
 			try {
 			    window.requestAnimationFrame(animloop);
@@ -40,16 +50,15 @@ var minigames = function() {
 			Minigames.menu();
 		    }
 		};
-
+		
 		try {
 		    window.requestAnimationFrame(animloop);
 		} catch (err) {
 		    window.webkitRequestAnimationFrame(animloop);
-		}
-		
+		}	
 	    };
 	    this.games.push(game1);
-
+	    
 	    var game2 = function() {
 		Minigames.menu();
 	    };
@@ -153,3 +162,15 @@ var minigames = function() {
 var Minigames = minigames();
 Minigames.setup();
 Minigames.menu();
+
+
+window.addEventListener("keydown", function(e) {
+    if(Minigames.currentKeys.indexOf(e.keyCode) === -1) {
+	Minigames.currentKeys.push(e.keyCode);
+    }
+});
+
+window.addEventListener("keyup", function(e) {
+    var index = Minigames.currentKeys.indexOf(e.keyCode);
+    Minigames.currentKeys.splice(index,index+1);
+});

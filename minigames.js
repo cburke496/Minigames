@@ -18,6 +18,9 @@ var minigames = function() {
     //Stores the key currently being pressed
 	currentKeys:[],
 
+    //Number of points needed to unlock each game
+	unlockVals:[0,50,150,400,1000,2500,5000,10000,25000,100000],
+
     //This is where the code for each game is made and then stored in the array
 	setup:function() {
 	    var game1 = function() {
@@ -45,15 +48,17 @@ var minigames = function() {
 		var currentPoints = 0;
 
 		var animloop = function() {
+		    var dx = 2;
+		    var dy = 5;
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
-		    if(key === 38) {
-			player.setAttribute('cy',parseInt(player.getAttribute('cy'))-5);
+		    if(key === 38 && player.getAttribute('cy') > radius + dy) {
+			player.setAttribute('cy',parseInt(player.getAttribute('cy'))-dy);
 		    }
-		    if(key === 40) {
-			player.setAttribute('cy',parseInt(player.getAttribute('cy'))+5);
+		    if(key === 40 && player.getAttribute('cy') < Minigames.height - radius - dy) {
+			player.setAttribute('cy',parseInt(player.getAttribute('cy'))+dy);
 		    }
 
-		    player.setAttribute('cx',parseInt(player.getAttribute('cx'))+2);
+		    player.setAttribute('cx',parseInt(player.getAttribute('cx'))+dx);
 		    
 		    var plen = pellets.length;
 		    for(var i = plen; i > 0; i--) {
@@ -166,14 +171,28 @@ var minigames = function() {
 		    choice.setAttribute('stroke',"#000000");
 		    svg.appendChild(choice);
 		    choices.push(choice);
+		    
+		    if(this.points < this.unlockVals[j*5+i]) {
+			var unlockText = document.createElementNS("http://www.w3.org/2000/svg","text");
+			unlockText.setAttribute('x',i*this.width/5 + this.width/10);
+			unlockText.setAttribute('y',j*this.height/2 + this.height/4);
+			unlockText.setAttribute('text-anchor',"middle");
+			unlockText.setAttribute('font-size',"18px");
+			unlockText.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
+			unlockText.appendChild(document.createTextNode("UNLOCK AT: "));
+			unlockText.appendChild(document.createTextNode(this.unlockVals[j*5+i]));
+			this.svg.appendChild(unlockText);
+		    }
 
 
 		//Each rect gets an event listener that runs the function for
 		//that game and then re-runs the menu function to setup the
 		//menu again once the game is over
 		    choice.addEventListener("click", function(e){
-			Minigames.clear();
-			Minigames.games[this.getAttribute('idNum')]();
+			if(Minigames.points >= Minigames.unlockVals[this.getAttribute('idNum')]) {
+			    Minigames.clear();
+			    Minigames.games[this.getAttribute('idNum')]();
+			}
 		    });
 		}
 	    }

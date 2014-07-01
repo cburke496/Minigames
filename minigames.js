@@ -45,6 +45,21 @@ var minigames = function() {
 		    pellets.push(pellet);
 		}
 
+		var superPellets = [];
+		for(var i = 0; i < 3; i++) {
+		    var superPellet = document.createElementNS("http://www.w3.org/2000/svg","circle");
+		    var spradius = 5;
+		    superPellet.setAttribute('r', spradius);
+		    superPellet.setAttribute('cx',Math.random()*(Minigames.width-2*spradius) + spradius);
+		    superPellet.setAttribute('cy',Math.random()*(Minigames.height-2*spradius) + spradius);
+		    superPellet.setAttribute('fill',"#ffff00");
+		    superPellet.setAttribute('stroke',"#ffff55");
+		    superPellet.setAttribute('stroke-width',2);
+		    Minigames.svg.appendChild(superPellet);
+		    superPellets.push(superPellet);
+		}
+
+
 		var currentPoints = 0;
 
 		var animloop = function() {
@@ -66,6 +81,15 @@ var minigames = function() {
 			    currentPoints++;
 			    Minigames.svg.removeChild(pellets[i-1]);
 			    pellets.splice(i-1,1)
+			}
+		    }
+
+		    var splen = superPellets.length;
+		    for(var i = splen; i > 0; i--) {
+			if(Math.pow(superPellets[i-1].getAttribute('cx')-player.getAttribute('cx'),2) + Math.pow(superPellets[i-1].getAttribute('cy')-player.getAttribute('cy'),2) < Math.pow(radius + spradius,2)) {
+			    currentPoints += 5;
+			    Minigames.svg.removeChild(superPellets[i-1]);
+			    superPellets.splice(i-1,1)
 			}
 		    }
 

@@ -24,11 +24,23 @@ var minigames = function() {
     //This is where the code for each game is made and then stored in the array
 	setup:function() {
 	    var game1 = function() {
+		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		background.setAttribute('width', Minigames.width);
+		background.setAttribute('height', Minigames.height);
+		background.setAttribute('x',0);
+		background.setAttribute('y',0);
+		background.setAttribute('fill',"#000000");
+		background.setAttribute('stroke',"#000000");
+		Minigames.svg.appendChild(background);
+
+
 		var player = document.createElementNS("http://www.w3.org/2000/svg","circle");
 		var radius = 6;
 		player.setAttribute('r', radius);
 		player.setAttribute('cx', radius);
 		player.setAttribute('cy', Minigames.height/2);
+		player.setAttribute('fill',"#ffffff");
+		player.setAttribute('stroke',"#ffffff");
 		Minigames.svg.appendChild(player);
 
 		var pellets = [];
@@ -115,8 +127,14 @@ var minigames = function() {
 			for(var i = plen; i > 0; i--) {
 			    Minigames.svg.removeChild(pellets[i-1]);
 			}
+			var splen = superPellets.length;
+			for(var i = splen; i > 0; i--) {
+			    Minigames.svg.removeChild(superPellets[i-1]);
+			}
 			Minigames.points += currentPoints;
 			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
+			Minigames.svg.removeChild(background);
+
 			Minigames.menu();
 		    }
 		};

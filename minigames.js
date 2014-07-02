@@ -146,9 +146,146 @@ var minigames = function() {
 		}	
 	    };
 	    this.games.push(game1);
-	    
 	    var game2 = function() {
-		Minigames.menu();
+		var spikeSize = 30;
+
+		var background1 = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		background1.setAttribute('width', Minigames.width);
+		background1.setAttribute('height', Minigames.height-spikeSize);
+		background1.setAttribute('x',0);
+		background1.setAttribute('y',0);
+		background1.setAttribute('fill',"#dddddd");
+		Minigames.svg.appendChild(background1);
+
+		var background2 = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		background2.setAttribute('width', Minigames.width);
+		background2.setAttribute('height', spikeSize);
+		background2.setAttribute('x',0);
+		background2.setAttribute('y',Minigames.height - spikeSize);
+		background2.setAttribute('fill',"#000000");
+		Minigames.svg.appendChild(background2);
+
+
+		var player = document.createElementNS("http://www.w3.org/2000/svg","circle");
+		var radius = 6;
+		var playerX = 20;
+		player.setAttribute('r', radius);
+		player.setAttribute('cx', playerX);
+		player.setAttribute('cy', Minigames.height - radius - spikeSize);
+		player.setAttribute('fill',"#ffffff");
+		Minigames.svg.appendChild(player);
+
+
+		var spikes = [];
+		var spikeCoords = [];
+
+		var currentPoints = 0;
+
+
+		var drawSpike = function(spike, xcoord) {
+		    spike.setAttribute('points',xcoord+","+Minigames.height+" "+(parseInt(xcoord)+spikeSize)+","+Minigames.height+" "+(parseInt(xcoord)+spikeSize/2)+","+(parseInt(Minigames.height-spikeSize)));
+		}
+
+
+		var dead = false;
+		var dx = 3;
+		var dy = 0;
+		var jumpdy = 5;
+		var gravity = 0.5;
+		var animloop = function() {
+		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+
+		    if(Math.random()*50 < 1) {
+			var spikeBackground = document.createElementNS("http://www.w3.org/2000/svg","rect");
+			spikeBackground.setAttribute("x",Minigames.width);
+			spikeBackground.setAttribute("y",parseInt(Minigames.height)-spikeSize);
+			spikeBackground.setAttribute("width",spikeSize);
+			spikeBackground.setAttribute("height",spikeSize);
+			spikeBackground.setAttribute("fill","#dddddd");
+			spikes.push(spikeBackground);
+			Minigames.svg.appendChild(spikeBackground);
+
+			var spike = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+			spike.setAttribute('fill',"#888888");
+			spike.setAttribute('stroke',"#777777");
+			drawSpike(spike, Minigames.width);
+			spikes.push(spike);
+			spikeCoords.push(Minigames.width);
+			Minigames.svg.appendChild(spike);
+		    }
+
+
+		    if(dy != 0 || player.getAttribute('cy') < Minigames.width-spikeSize-radius) {
+			dy -= gravity;
+		    }
+		    player.setAttribute('cy',parseInt(player.getAttribute('cy'))-dy);
+		    if(player.getAttribute('cy') > Minigames.height - spikeSize - radius) {
+			player.setAttribute('cy',parseInt(Minigames.height)-spikeSize - radius);
+			dy = 0;
+		    }
+
+		    var slen = spikeCoords.length;
+		    for(var i = slen - 1; i >= 0; i--) {
+			spikeCoords[i] -= dx;
+			drawSpike(spikes[2*i+1],spikeCoords[i]);
+			spikes[2*i].setAttribute('x',spikeCoords[i]);
+
+
+			if(playerX >= spikeCoords[i] && playerX <= spikeCoords[i] + spikeSize && parseInt(player.getAttribute('cy')) === Minigames.height-spikeSize-radius) {
+			    dead = true;
+			}
+		    }
+		    if(spikeCoords[0] + spikeSize < 0) {
+			spikeCoords.splice(0,1)
+			Minigames.svg.removeChild(spikes[0]);
+			Minigames.svg.removeChild(spikes[1]);
+			spikes.splice(0,2)
+			currentPoints++;
+		    }
+
+		    
+		    if(key === 32 && parseInt(player.getAttribute('cy')) === parseInt(Minigames.height)-spikeSize-radius) {
+			dy = jumpdy;
+		    }
+
+
+		    var pointsText = document.createElement("p");
+		    Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
+		    Minigames.body.appendChild(pointsText);
+		    pointsText.appendChild(document.createTextNode("Points for this Game: "));
+		    pointsText.appendChild(document.createTextNode(currentPoints));
+		    pointsText.style.setProperty("padding-left","1em");
+		    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
+		    pointsText.style.setProperty("font-size", "18px");
+
+
+		    if(!dead) {
+			try {
+			    window.requestAnimationFrame(animloop);
+			} catch (err) {
+			    window.webkitRequestAnimationFrame(animloop);
+			}
+		    } else {
+			Minigames.svg.removeChild(player);
+			var slen = spikes.length;
+			for(var i = slen - 1; i >= 0; i--) {
+			    Minigames.svg.removeChild(spikes[i]);
+			}
+			
+			Minigames.points += currentPoints;
+			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
+			Minigames.svg.removeChild(background1);
+			Minigames.svg.removeChild(background2);
+
+			Minigames.menu();
+		    }
+		};
+		
+		try {
+		    window.requestAnimationFrame(animloop);
+		} catch (err) {
+		    window.webkitRequestAnimationFrame(animloop);
+		}	
 	    };
 	    this.games.push(game2);
 

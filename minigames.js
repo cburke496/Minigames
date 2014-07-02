@@ -78,10 +78,10 @@ var minigames = function() {
 		    var dx = 2;
 		    var dy = 5;
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
-		    if(key === 38 && player.getAttribute('cy') > radius + dy) {
+		    if((key === 38 || key === 87) && player.getAttribute('cy') > radius + dy) {
 			player.setAttribute('cy',parseInt(player.getAttribute('cy'))-dy);
 		    }
-		    if(key === 40 && player.getAttribute('cy') < Minigames.height - radius - dy) {
+		    if((key === 40 || key === 83)&& player.getAttribute('cy') < Minigames.height - radius - dy) {
 			player.setAttribute('cy',parseInt(player.getAttribute('cy'))+dy);
 		    }
 
@@ -99,7 +99,7 @@ var minigames = function() {
 		    var splen = superPellets.length;
 		    for(var i = splen; i > 0; i--) {
 			if(Math.pow(superPellets[i-1].getAttribute('cx')-player.getAttribute('cx'),2) + Math.pow(superPellets[i-1].getAttribute('cy')-player.getAttribute('cy'),2) < Math.pow(radius + spradius,2)) {
-			    currentPoints += 5;
+			    currentPoints += 3;
 			    Minigames.svg.removeChild(superPellets[i-1]);
 			    superPellets.splice(i-1,1)
 			}

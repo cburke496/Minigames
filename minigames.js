@@ -147,7 +147,8 @@ var minigames = function() {
 	    };
 	    this.games.push(game1);
 	    var game2 = function() {
-		var spikeSize = 30;
+		var spikeSize = 60;
+		var spikeValue = 3;
 
 		var background1 = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		background1.setAttribute('width', Minigames.width);
@@ -167,8 +168,8 @@ var minigames = function() {
 
 
 		var player = document.createElementNS("http://www.w3.org/2000/svg","circle");
-		var radius = 6;
-		var playerX = 20;
+		var radius = 20;
+		var playerX = 100;
 		player.setAttribute('r', radius);
 		player.setAttribute('cx', playerX);
 		player.setAttribute('cy', Minigames.height - radius - spikeSize);
@@ -188,14 +189,14 @@ var minigames = function() {
 
 
 		var dead = false;
-		var dx = 3;
+		var dx = 5;
 		var dy = 0;
-		var jumpdy = 5;
-		var gravity = 0.5;
+		var jumpdy = 20;
+		var gravity = 1;
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
 
-		    if(Math.random()*50 < 1) {
+		    if(Math.random()*250/dx < 1 && (spikeCoords.length === 0 || spikeCoords[spikeCoords.length-1] <= Minigames.width - spikeSize)) {
 			var spikeBackground = document.createElementNS("http://www.w3.org/2000/svg","rect");
 			spikeBackground.setAttribute("x",Minigames.width);
 			spikeBackground.setAttribute("y",parseInt(Minigames.height)-spikeSize);
@@ -240,7 +241,10 @@ var minigames = function() {
 			Minigames.svg.removeChild(spikes[0]);
 			Minigames.svg.removeChild(spikes[1]);
 			spikes.splice(0,2)
-			currentPoints++;
+			currentPoints += 3;
+			if(currentPoints % (3*spikeValue) === 0) {
+			    dx++;
+			}
 		    }
 
 		    

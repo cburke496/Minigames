@@ -294,7 +294,48 @@ var minigames = function() {
 	    this.games.push(game2);
 
 	    var game3 = function() {
-		Minigames.menu();
+		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		    background.setAttribute("fill","eeeeff");
+		    background.setAttribute("x",0);
+		    background.setAttribute("y",0);
+		    background.setAttribute("width",Minigames.width);
+		    background.setAttribute("height",Minigames.height);
+		    Minigames.svg.appendChild(background);
+
+		var boxes = [];
+		for(var i = 0; i < 75; i++) {
+		    var box = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		    var boxSize = Math.random()*200 + 50;
+		    box.setAttribute("fill","0000"+Minigames.dec2Hex(Math.random()*256));
+		    box.setAttribute("x",Math.random()*(Minigames.width-boxSize));
+		    box.setAttribute("y",Math.random()*(Minigames.height-boxSize));
+		    box.setAttribute("width",boxSize);
+		    box.setAttribute("height",boxSize);
+		    box.setAttribute("opacity",Math.random()*0.75);	
+		    Minigames.svg.appendChild(box);
+		    boxes.push(box);
+		}
+
+
+		var animloop = function() {
+		    for(var i = 0; i < boxes.length; i++) {
+			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*6-3);
+			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*6-3);
+		    }
+
+		    try {
+			window.requestAnimationFrame(animloop);
+		    } catch (err) {
+			window.webkitRequestAnimationFrame(animloop);
+		    }
+		}
+
+		try {
+		    window.requestAnimationFrame(animloop);
+		} catch (err) {
+		    window.webkitRequestAnimationFrame(animloop);
+		}	
+
 	    };
 	    this.games.push(game3);
 
@@ -398,6 +439,43 @@ var minigames = function() {
 	    }
 	    //var totalPoints = document.getElementsByTagName("p")[0];
 	    //this.body.removeChild(totalPoints);
+	},
+	dec2Hex: function(n) {
+	    var result = "";
+	    var digits = "0123456789ABCDEF";
+	    var counter = 0;
+	    var oldCounter = 0;
+	    
+	    if(n == 0) {
+		return "0";
+	    }
+	    
+	    while(n > 0) {
+		var tmp = n;
+		oldCounter = counter;
+		counter = 0;
+		while(tmp >= 16) {
+		    counter++;
+		    tmp = parseInt(tmp / 16);
+		}
+
+		if(oldCounter - counter > 1) {
+		    for(var i = 0; i < oldCounter - counter - 1; i++) {
+			result += '0';
+		    }
+		}
+
+		result += digits.substring(tmp,tmp+1);
+		n -= tmp * Math.pow(16,counter);
+		
+		if(n == 0) {
+		    while(counter > 0) {
+			result += '0';
+			counter--;
+		    }
+		}
+	    }
+	    return result;
 	}
     };
 };

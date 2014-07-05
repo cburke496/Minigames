@@ -105,14 +105,7 @@ var minigames = function() {
 			}
 		    }
 
-		    var pointsText = document.createElement("p");
-		    Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
-		    Minigames.body.appendChild(pointsText);
-		    pointsText.appendChild(document.createTextNode("Points for this Game: "));
-		    pointsText.appendChild(document.createTextNode(currentPoints));
-		    pointsText.style.setProperty("padding-left","1em");
-		    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
-		    pointsText.style.setProperty("font-size", "18px");
+		    Minigames.displayGamePoints(currentPoints);
 
 
 		    if(player.getAttribute('cx') < Minigames.width - radius) {
@@ -122,22 +115,8 @@ var minigames = function() {
 			    window.webkitRequestAnimationFrame(animloop);
 			}
 		    } else {
-			/*
-			Minigames.svg.removeChild(player);
-			var plen = pellets.length;
-			for(var i = plen; i > 0; i--) {
-			    Minigames.svg.removeChild(pellets[i-1]);
-			}
-			var splen = superPellets.length;
-			for(var i = splen; i > 0; i--) {
-			    Minigames.svg.removeChild(superPellets[i-1]);
-			}
-			*/
 			Minigames.points += currentPoints;
-			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
 			Minigames.clear();
-			//Minigames.svg.removeChild(background);
-
 			Minigames.menu();
 		    }
 		};
@@ -255,16 +234,7 @@ var minigames = function() {
 			dy = jumpdy;
 		    }
 
-
-		    var pointsText = document.createElement("p");
-		    Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
-		    Minigames.body.appendChild(pointsText);
-		    pointsText.appendChild(document.createTextNode("Points for this Game: "));
-		    pointsText.appendChild(document.createTextNode(currentPoints));
-		    pointsText.style.setProperty("padding-left","1em");
-		    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
-		    pointsText.style.setProperty("font-size", "18px");
-
+		    Minigames.displayGamePoints(currentPoints);
 
 		    if(!dead) {
 			try {
@@ -273,19 +243,8 @@ var minigames = function() {
 			    window.webkitRequestAnimationFrame(animloop);
 			}
 		    } else {
-			/*
-			Minigames.svg.removeChild(player);
-			var slen = spikes.length;
-			for(var i = slen - 1; i >= 0; i--) {
-			    Minigames.svg.removeChild(spikes[i]);
-			}
-			Minigames.svg.removeChild(background1);
-			Minigames.svg.removeChild(background2);
-			*/
-
 			Minigames.points += currentPoints;
 			Minigames.clear();
-			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
 			Minigames.menu();
 		    }
 		};
@@ -350,14 +309,7 @@ var minigames = function() {
 		    timerWidth -= dWidth;
 
 
-		    var pointsText = document.createElement("p");
-		    Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
-		    Minigames.body.appendChild(pointsText);
-		    pointsText.appendChild(document.createTextNode("Points for this Game: "));
-		    pointsText.appendChild(document.createTextNode(currentPoints));
-		    pointsText.style.setProperty("padding-left","1em");
-		    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
-		    pointsText.style.setProperty("font-size", "18px");
+		    Minigames.displayGamePoints(currentPoints);
 
 
 		    if(timerValue > 0) {
@@ -369,7 +321,6 @@ var minigames = function() {
 		    } else {
 			Minigames.points += currentPoints;
 			Minigames.clear();
-			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
 			Minigames.menu();
 		    }
 		}
@@ -467,13 +418,7 @@ var minigames = function() {
 	    
 	    
 	//Puts the total number of points on the screen
-	    var pointsText = document.createElement("p");
-	    this.body.appendChild(pointsText);
-	    pointsText.appendChild(document.createTextNode("Total Points: "));
-	    pointsText.appendChild(document.createTextNode(this.points));
-	    pointsText.style.setProperty("padding-left","1em");
-	    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
-	    pointsText.style.setProperty("font-size", "18px");
+	    this.displayTotalPoints(this.points);
 	},
 	clear: function() {
 	    var children = this.svg.childNodes;
@@ -522,6 +467,28 @@ var minigames = function() {
 		return "0"+result;
 	    }
 	    return result;
+	},
+	displayPoints: function(message) {
+	    return function(points) {
+		var prevPoints = document.getElementsByTagName("p");
+		if(prevPoints.length > 0) {
+		    Minigames.body.removeChild(prevPoints[0]);
+		}
+
+		var pointsText = document.createElement("p");
+		Minigames.body.appendChild(pointsText);
+		pointsText.appendChild(document.createTextNode(message));
+		pointsText.appendChild(document.createTextNode(points));
+		pointsText.style.setProperty("padding-left","1em");
+		pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
+		pointsText.style.setProperty("font-size", "18px");
+	    };
+	},
+	displayTotalPoints: function(points) {
+	    Minigames.displayPoints("Total Points: ")(points);
+	},
+	displayGamePoints: function(points) {
+	    Minigames.displayPoints("Points for this Game: ")(points);
 	}
     };
 };

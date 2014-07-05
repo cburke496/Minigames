@@ -122,6 +122,7 @@ var minigames = function() {
 			    window.webkitRequestAnimationFrame(animloop);
 			}
 		    } else {
+			/*
 			Minigames.svg.removeChild(player);
 			var plen = pellets.length;
 			for(var i = plen; i > 0; i--) {
@@ -131,9 +132,11 @@ var minigames = function() {
 			for(var i = splen; i > 0; i--) {
 			    Minigames.svg.removeChild(superPellets[i-1]);
 			}
+			*/
 			Minigames.points += currentPoints;
 			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
-			Minigames.svg.removeChild(background);
+			Minigames.clear();
+			//Minigames.svg.removeChild(background);
 
 			Minigames.menu();
 		    }
@@ -270,17 +273,19 @@ var minigames = function() {
 			    window.webkitRequestAnimationFrame(animloop);
 			}
 		    } else {
+			/*
 			Minigames.svg.removeChild(player);
 			var slen = spikes.length;
 			for(var i = slen - 1; i >= 0; i--) {
 			    Minigames.svg.removeChild(spikes[i]);
 			}
-			
-			Minigames.points += currentPoints;
-			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
 			Minigames.svg.removeChild(background1);
 			Minigames.svg.removeChild(background2);
+			*/
 
+			Minigames.points += currentPoints;
+			Minigames.clear();
+			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
 			Minigames.menu();
 		    }
 		};
@@ -294,6 +299,8 @@ var minigames = function() {
 	    this.games.push(game2);
 
 	    var game3 = function() {
+		var currentPoints = 0;
+
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    background.setAttribute("fill","eeeeff");
 		    background.setAttribute("x",0);
@@ -318,16 +325,52 @@ var minigames = function() {
 		}
 
 
+		var timerValue = 255;
+		var timerWidth = 300;
+		var dWidth = timerWidth/timerValue;
+		var timerHeight = 20;
+		var timer = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		timer.setAttribute("width",timerWidth);
+		timer.setAttribute("height",timerHeight);
+		timer.setAttribute("x",Minigames.width/2 - timerWidth/2);
+		timer.setAttribute("y",Minigames.height - timerHeight * 2);
+		timer.setAttribute("fill","#00ff00");
+		Minigames.svg.appendChild(timer);
+
+
 		var animloop = function() {
 		    for(var i = 0; i < boxes.length; i++) {
 			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*6-3);
 			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*6-3);
 		    }
 
-		    try {
-			window.requestAnimationFrame(animloop);
-		    } catch (err) {
-			window.webkitRequestAnimationFrame(animloop);
+		    timer.setAttribute("fill","#"+Minigames.dec2Hex(255-timerValue)+Minigames.dec2Hex(timerValue)+"00")
+		    timer.setAttribute("width",timerWidth);
+		    timerValue--;
+		    timerWidth -= dWidth;
+
+
+		    var pointsText = document.createElement("p");
+		    Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
+		    Minigames.body.appendChild(pointsText);
+		    pointsText.appendChild(document.createTextNode("Points for this Game: "));
+		    pointsText.appendChild(document.createTextNode(currentPoints));
+		    pointsText.style.setProperty("padding-left","1em");
+		    pointsText.style.setProperty("font-family","'Comic Sans MS', cursive, sans-serif");
+		    pointsText.style.setProperty("font-size", "18px");
+
+
+		    if(timerValue > 0) {
+			try {
+			    window.requestAnimationFrame(animloop);
+			} catch (err) {
+			    window.webkitRequestAnimationFrame(animloop);
+			}
+		    } else {
+			Minigames.points += currentPoints;
+			Minigames.clear();
+			Minigames.body.removeChild(document.getElementsByTagName("p")[0]);
+			Minigames.menu();
 		    }
 		}
 
@@ -438,8 +481,6 @@ var minigames = function() {
 	    for(var i = 0; i < len; i++) {
 		this.svg.removeChild(children[0]);
 	    }
-	    //var totalPoints = document.getElementsByTagName("p")[0];
-	    //this.body.removeChild(totalPoints);
 	},
 	dec2Hex: function(n) {
 	    var result = "";
@@ -475,6 +516,10 @@ var minigames = function() {
 			counter--;
 		    }
 		}
+	    }
+
+	    if(result.length === 1) {
+		return "0"+result;
 	    }
 	    return result;
 	}

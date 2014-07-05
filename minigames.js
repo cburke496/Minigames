@@ -311,7 +311,8 @@ var minigames = function() {
 		    box.setAttribute("y",Math.random()*(Minigames.height-boxSize));
 		    box.setAttribute("width",boxSize);
 		    box.setAttribute("height",boxSize);
-		    box.setAttribute("opacity",Math.random()*0.75);	
+		    box.setAttribute("opacity",Math.random()*0.75);
+		    box.setAttribute("transform","rotate("+Math.random()*90+" "+(parseFloat(box.getAttribute('x'))+boxSize/2)+" "+(parseFloat(box.getAttribute('y'))+boxSize/2)+")");
 		    Minigames.svg.appendChild(box);
 		    boxes.push(box);
 		}

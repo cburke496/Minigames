@@ -258,7 +258,7 @@ var minigames = function() {
 	    this.games.push(game2);
 
 	    var game3 = function() {
-		var currentPoints = 0;
+		var currentPoints = 200;
 
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    background.setAttribute("fill","eeeeff");
@@ -278,7 +278,7 @@ var minigames = function() {
 		    box.setAttribute("width",boxSize);
 		    box.setAttribute("height",boxSize);
 		    box.setAttribute("opacity",Math.random()*0.75);
-		    box.setAttribute("transform","rotate("+Math.random()*90+" "+(parseFloat(box.getAttribute('x'))+boxSize/2)+" "+(parseFloat(box.getAttribute('y'))+boxSize/2)+")");
+		    //box.setAttribute("transform","rotate("+Math.random()*90+" "+(parseFloat(box.getAttribute('x'))+boxSize/2)+" "+(parseFloat(box.getAttribute('y'))+boxSize/2)+")");
 		    Minigames.svg.appendChild(box);
 		    boxes.push(box);
 		}
@@ -303,8 +303,10 @@ var minigames = function() {
 		player.setAttribute("width",pSize);
 		player.setAttribute("height",pSize);
 		player.setAttribute("fill","#000000");
-		player.setAttribute("x",Minigames.width/2 + pSize/2);
-		player.setAttribute("y",Minigames.height/2 + pSize/2);
+		//player.setAttribute("x",Minigames.width/2 + pSize/2);
+		//player.setAttribute("y",Minigames.height/2 + pSize/2);
+		player.setAttribute("x",Math.random()*(Minigames.width-pSize)*3/4+(Minigames.width-pSize)/8);
+		player.setAttribute("y",Math.random()*(Minigames.height-pSize)*3/4+(Minigames.height-pSize)/8);
 		Minigames.svg.appendChild(player);
 
 
@@ -314,6 +316,20 @@ var minigames = function() {
 		    for(var i = 0; i < boxes.length; i++) {
 			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*6-3);
 			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*6-3);
+
+			var boxX = boxes[i].getAttribute('x');
+			var boxY = boxes[i].getAttribute('y');
+			var boxW = boxes[i].getAttribute('width');
+			var boxH = boxes[i].getAttribute('height');
+			var pX = player.getAttribute('x');
+			var pY = player.getAttribute('y');
+
+			
+			if((pX + pSize) > boxX && pX < (boxX + boxW) /*&&
+			   pY + pSize > boxY && pY < boxY + boxH*/) {
+			    currentPoints--;
+			    console.log("blah");
+			}
 		    }
 
 		    timer.setAttribute("fill","#"+Minigames.dec2Hex(255-timerValue)+Minigames.dec2Hex(timerValue)+"00")

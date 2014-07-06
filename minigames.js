@@ -258,7 +258,8 @@ var minigames = function() {
 	    this.games.push(game2);
 
 	    var game3 = function() {
-		var currentPoints = 500;
+		var currentPoints = 200;
+		var numBoxes = 40;
 
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    background.setAttribute("fill","eeeeff");
@@ -269,12 +270,13 @@ var minigames = function() {
 		    Minigames.svg.appendChild(background);
 
 		var boxes = [];
-		for(var i = 0; i < 75; i++) {
+		var extraSpace = 100;
+		for(var i = 0; i < numBoxes; i++) {
 		    var box = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    var boxSize = Math.random()*200 + 50;
 		    box.setAttribute("fill","0000"+Minigames.dec2Hex(Math.random()*256));
-		    box.setAttribute("x",Math.random()*(Minigames.width-boxSize));
-		    box.setAttribute("y",Math.random()*(Minigames.height-boxSize));
+		    box.setAttribute("x",Math.random()*(Minigames.width-boxSize + 2*extraSpace) - extraSpace);
+		    box.setAttribute("y",Math.random()*(Minigames.height-boxSize + 2*extraSpace) - extraSpace);
 		    box.setAttribute("width",boxSize);
 		    box.setAttribute("height",boxSize);
 		    box.setAttribute("opacity",Math.random()*0.75);
@@ -312,10 +314,11 @@ var minigames = function() {
 
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+		    var wiggleRoom = 10;
 
 		    for(var i = 0; i < boxes.length; i++) {
-			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*6-3);
-			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*6-3);
+			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*wiggleRoom*2-wiggleRoom);
+			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*wiggleRoom*2-wiggleRoom);
 
 			var boxX = boxes[i].getAttribute('x');
 			var boxY = boxes[i].getAttribute('y');

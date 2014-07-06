@@ -258,7 +258,7 @@ var minigames = function() {
 	    this.games.push(game2);
 
 	    var game3 = function() {
-		var currentPoints = 200;
+		var currentPoints = 500;
 
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    background.setAttribute("fill","eeeeff");
@@ -325,10 +325,13 @@ var minigames = function() {
 			var pY = player.getAttribute('y');
 
 			
-			if((pX + pSize) > boxX && pX < (boxX + boxW) /*&&
-			   pY + pSize > boxY && pY < boxY + boxH*/) {
-			    currentPoints--;
-			    console.log("blah");
+			if(parseInt(pX) + parseInt(pSize) > parseInt(boxX) && 
+			   parseInt(pX) < parseInt(boxX) + parseInt(boxW) &&
+			   parseInt(pY) + parseInt(pSize) > parseInt(boxY) && 
+			   parseInt(pY) < parseInt(boxY) + parseInt(boxH)) {
+			    if(currentPoints > 0) {
+				currentPoints--;
+			    }
 			}
 		    }
 

@@ -297,7 +297,20 @@ var minigames = function() {
 		Minigames.svg.appendChild(timer);
 
 
+		var player = document.createElementNS("http://www.w3.org/2000/svg","rect");	
+		var pSize = 10;
+		var pSpeed = 5;
+		player.setAttribute("width",pSize);
+		player.setAttribute("height",pSize);
+		player.setAttribute("fill","#000000");
+		player.setAttribute("x",Minigames.width/2 + pSize/2);
+		player.setAttribute("y",Minigames.height/2 + pSize/2);
+		Minigames.svg.appendChild(player);
+
+
 		var animloop = function() {
+		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+
 		    for(var i = 0; i < boxes.length; i++) {
 			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*6-3);
 			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*6-3);
@@ -307,6 +320,21 @@ var minigames = function() {
 		    timer.setAttribute("width",timerWidth);
 		    timerValue--;
 		    timerWidth -= dWidth;
+		    
+		    
+		    if((Minigames.currentKeys.indexOf(37) > Minigames.currentKeys.indexOf(39) || Minigames.currentKeys.indexOf(65) > Minigames.currentKeys.indexOf(68)) && player.getAttribute('x') >= pSpeed) {
+			player.setAttribute('x',parseInt(player.getAttribute('x'))-pSpeed);
+		    }
+		    if((Minigames.currentKeys.indexOf(38) > Minigames.currentKeys.indexOf(40) || Minigames.currentKeys.indexOf(87) > Minigames.currentKeys.indexOf(83)) && player.getAttribute('y') >= pSpeed) {
+			player.setAttribute('y',parseInt(player.getAttribute('y'))-pSpeed);
+		    }
+		    if((Minigames.currentKeys.indexOf(39) > Minigames.currentKeys.indexOf(37) || Minigames.currentKeys.indexOf(68) > Minigames.currentKeys.indexOf(65)) && player.getAttribute('x') < Minigames.width - pSize - pSpeed) {
+			player.setAttribute('x',parseInt(player.getAttribute('x'))+pSpeed);
+		    }
+		    if((Minigames.currentKeys.indexOf(40) > Minigames.currentKeys.indexOf(38) || Minigames.currentKeys.indexOf(83) > Minigames.currentKeys.indexOf(87)) && player.getAttribute('y') < Minigames.height - pSize - pSpeed) {
+			player.setAttribute('y',parseInt(player.getAttribute('y'))+pSpeed);
+		    }
+
 
 
 		    Minigames.displayGamePoints(currentPoints);

@@ -259,7 +259,7 @@ var minigames = function() {
 
 	    var game3 = function() {
 		var currentPoints = 200;
-		var numBoxes = 40;
+		var numBoxes = 30;
 
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    background.setAttribute("fill","eeeeff");
@@ -312,8 +312,30 @@ var minigames = function() {
 		Minigames.svg.appendChild(player);
 
 
+		var dodge = document.createElementNS("http://www.w3.org/2000/svg","text");
+		var dOpacity = 1;
+		dodge.setAttribute('x',Minigames.width/2);
+		dodge.setAttribute('y',Minigames.height*3/4);
+		dodge.setAttribute('opacity',dOpacity);
+		dodge.setAttribute('text-anchor',"middle");
+		dodge.setAttribute('font-size',"300px");
+		dodge.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
+		dodge.appendChild(document.createTextNode("DODGE"));
+
+		Minigames.svg.appendChild(dodge);
+
+
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+		    
+		    if(dOpacity > 0) {
+			dOpacity -= 0.03;
+		    } 
+		    if(dOpacity < 0) {
+			dOpacity = 0;
+		    }
+		    dodge.setAttribute('opacity',dOpacity);
+
 		    var wiggleRoom = 20;
 
 		    for(var i = 0; i < boxes.length; i++) {

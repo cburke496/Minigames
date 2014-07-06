@@ -280,7 +280,7 @@ var minigames = function() {
 		    box.setAttribute("width",boxSize);
 		    box.setAttribute("height",boxSize);
 		    box.setAttribute("opacity",Math.random()*0.75);
-		    //box.setAttribute("transform","rotate("+Math.random()*90+" "+(parseFloat(box.getAttribute('x'))+boxSize/2)+" "+(parseFloat(box.getAttribute('y'))+boxSize/2)+")");
+
 		    Minigames.svg.appendChild(box);
 		    boxes.push(box);
 		}
@@ -314,7 +314,7 @@ var minigames = function() {
 
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
-		    var wiggleRoom = 10;
+		    var wiggleRoom = 20;
 
 		    for(var i = 0; i < boxes.length; i++) {
 			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*wiggleRoom*2-wiggleRoom);
@@ -370,6 +370,7 @@ var minigames = function() {
 			}
 		    } else {
 			Minigames.points += currentPoints;
+			console.log(currentPoints);
 			Minigames.clear();
 			Minigames.menu();
 		    }

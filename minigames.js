@@ -19,7 +19,8 @@ var minigames = function() {
 	currentKeys:[],
 
     //Number of points needed to unlock each game
-	unlockVals:[0,50,150,400,1000,2500,5000,10000,25000,100000],
+	//unlockVals:[0,50,150,400,1000,2500,5000,10000,25000,100000],
+	unlockVals:[0,0,0,0,0,0,0,0,0,0],
 
     //This is where the code for each game is made and then stored in the array
 	setup:function() {

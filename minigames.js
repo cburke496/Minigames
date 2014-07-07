@@ -263,7 +263,7 @@ var minigames = function() {
 		var numBoxes = 30;
 
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
-		    background.setAttribute("fill","eeeeff");
+		    background.setAttribute("fill","#eeeeff");
 		    background.setAttribute("x",0);
 		    background.setAttribute("y",0);
 		    background.setAttribute("width",Minigames.width);
@@ -393,7 +393,7 @@ var minigames = function() {
 			}
 		    } else {
 			Minigames.points += currentPoints;
-			console.log(currentPoints);
+			//console.log(currentPoints);
 			Minigames.clear();
 			Minigames.menu();
 		    }

@@ -275,7 +275,7 @@ var minigames = function() {
 		for(var i = 0; i < numBoxes; i++) {
 		    var box = document.createElementNS("http://www.w3.org/2000/svg","rect");
 		    var boxSize = Math.random()*200 + 50;
-		    box.setAttribute("fill","0000"+Minigames.dec2Hex(Math.random()*256));
+		    box.setAttribute("fill","#0000"+Minigames.dec2Hex(Math.random()*256));
 		    box.setAttribute("x",Math.random()*(Minigames.width-boxSize + 2*extraSpace) - extraSpace);
 		    box.setAttribute("y",Math.random()*(Minigames.height-boxSize + 2*extraSpace) - extraSpace);
 		    box.setAttribute("width",boxSize);
@@ -306,8 +306,6 @@ var minigames = function() {
 		player.setAttribute("width",pSize);
 		player.setAttribute("height",pSize);
 		player.setAttribute("fill","#000000");
-		//player.setAttribute("x",Minigames.width/2 + pSize/2);
-		//player.setAttribute("y",Minigames.height/2 + pSize/2);
 		player.setAttribute("x",Math.random()*(Minigames.width-pSize)*3/4+(Minigames.width-pSize)/8);
 		player.setAttribute("y",Math.random()*(Minigames.height-pSize)*3/4+(Minigames.height-pSize)/8);
 		Minigames.svg.appendChild(player);

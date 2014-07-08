@@ -105,25 +105,20 @@ var minigames = function() {
 			    superPellets.splice(i-1,1)
 			}
 		    }
-
+		    
 		    Minigames.displayGamePoints(currentPoints);
-
-
+		    
+		    
 		    if(player.getAttribute('cx') < Minigames.width - radius) {
-			var w = window;
-			requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-			requestAnimationFrame(animloop);
-
+			Minigames.nextFrame(animloop);
 		    } else {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();
 		    }
 		};
-	
-		var w = window;
-		requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-		requestAnimationFrame(animloop);
+		
+		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game1);
 	    var game2 = function() {
@@ -156,7 +151,7 @@ var minigames = function() {
 		player.setAttribute('fill',"#ffffff");
 		Minigames.svg.appendChild(player);
 
-
+		
 		var spikes = [];
 		var spikeCoords = [];
 
@@ -210,8 +205,8 @@ var minigames = function() {
 			spikeCoords[i] -= dx;
 			drawSpike(spikes[2*i+1],spikeCoords[i]);
 			spikes[2*i].setAttribute('x',spikeCoords[i]);
-
-
+			
+			
 			if(playerX >= spikeCoords[i] && playerX <= spikeCoords[i] + spikeSize && parseInt(player.getAttribute('cy')) === Minigames.height-spikeSize-radius) {
 			    dead = true;
 			}
@@ -226,43 +221,39 @@ var minigames = function() {
 			    dx++;
 			}
 		    }
-
+		    
 		    
 		    if(key === 32 && parseInt(player.getAttribute('cy')) === parseInt(Minigames.height)-spikeSize-radius) {
 			dy = jumpdy;
 		    }
-
+		    
 		    Minigames.displayGamePoints(currentPoints);
-
+		    
 		    if(!dead) {
-			var w = window;
-			requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-			requestAnimationFrame(animloop);
+			Minigames.nextFrame(animloop);
 		    } else {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();
 		    }
 		};
-	
-		var w = window;
-		requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-		requestAnimationFrame(animloop);
+		
+		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game2);
-
+	    
 	    var game3 = function() {
 		var currentPoints = 200;
 		var numBoxes = 30;
-
+		
 		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
-		    background.setAttribute("fill","#eeeeff");
-		    background.setAttribute("x",0);
-		    background.setAttribute("y",0);
-		    background.setAttribute("width",Minigames.width);
-		    background.setAttribute("height",Minigames.height);
-		    Minigames.svg.appendChild(background);
-
+		background.setAttribute("fill","#eeeeff");
+		background.setAttribute("x",0);
+		background.setAttribute("y",0);
+		background.setAttribute("width",Minigames.width);
+		background.setAttribute("height",Minigames.height);
+		Minigames.svg.appendChild(background);
+		
 		var boxes = [];
 		var extraSpace = 100;
 		for(var i = 0; i < numBoxes; i++) {
@@ -274,12 +265,12 @@ var minigames = function() {
 		    box.setAttribute("width",boxSize);
 		    box.setAttribute("height",boxSize);
 		    box.setAttribute("opacity",Math.random()*0.75);
-
+		    
 		    Minigames.svg.appendChild(box);
 		    boxes.push(box);
 		}
-
-
+		
+		
 		var timerValue = 255;
 		var timerWidth = 300;
 		var dWidth = timerWidth/timerValue;
@@ -291,8 +282,8 @@ var minigames = function() {
 		timer.setAttribute("y",Minigames.height - timerHeight * 2);
 		timer.setAttribute("fill","#00ff00");
 		Minigames.svg.appendChild(timer);
-
-
+		
+		
 		var player = document.createElementNS("http://www.w3.org/2000/svg","rect");	
 		var pSize = 10;
 		var pSpeed = 5;
@@ -302,8 +293,8 @@ var minigames = function() {
 		player.setAttribute("x",Math.random()*(Minigames.width-pSize)*3/4+(Minigames.width-pSize)/8);
 		player.setAttribute("y",Math.random()*(Minigames.height-pSize)*3/4+(Minigames.height-pSize)/8);
 		Minigames.svg.appendChild(player);
-
-
+		
+		
 		var dodge = document.createElementNS("http://www.w3.org/2000/svg","text");
 		var dOpacity = 1;
 		dodge.setAttribute('x',Minigames.width/2);
@@ -313,10 +304,10 @@ var minigames = function() {
 		dodge.setAttribute('font-size',"300px");
 		dodge.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
 		dodge.appendChild(document.createTextNode("DODGE"));
-
+		
 		Minigames.svg.appendChild(dodge);
-
-
+		
+		
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
 		    
@@ -327,20 +318,20 @@ var minigames = function() {
 			dOpacity = 0;
 		    }
 		    dodge.setAttribute('opacity',dOpacity);
-
+		    
 		    var wiggleRoom = 20;
-
+		    
 		    for(var i = 0; i < boxes.length; i++) {
 			boxes[i].setAttribute('x',parseFloat(boxes[i].getAttribute('x'))+Math.random()*wiggleRoom*2-wiggleRoom);
 			boxes[i].setAttribute('y',parseFloat(boxes[i].getAttribute('y'))+Math.random()*wiggleRoom*2-wiggleRoom);
-
+			
 			var boxX = boxes[i].getAttribute('x');
 			var boxY = boxes[i].getAttribute('y');
 			var boxW = boxes[i].getAttribute('width');
 			var boxH = boxes[i].getAttribute('height');
 			var pX = player.getAttribute('x');
 			var pY = player.getAttribute('y');
-
+			
 			
 			if(parseInt(pX) + parseInt(pSize) > parseInt(boxX) && 
 			   parseInt(pX) < parseInt(boxX) + parseInt(boxW) &&
@@ -351,7 +342,7 @@ var minigames = function() {
 			    }
 			}
 		    }
-
+		    
 		    timer.setAttribute("fill","#"+Minigames.dec2Hex(255-timerValue)+Minigames.dec2Hex(timerValue)+"00")
 		    timer.setAttribute("width",timerWidth);
 		    timerValue--;
@@ -370,35 +361,40 @@ var minigames = function() {
 		    if((Minigames.currentKeys.indexOf(40) > Minigames.currentKeys.indexOf(38) || Minigames.currentKeys.indexOf(83) > Minigames.currentKeys.indexOf(87)) && player.getAttribute('y') < Minigames.height - pSize - pSpeed) {
 			player.setAttribute('y',parseInt(player.getAttribute('y'))+pSpeed);
 		    }
-
-
-
+		    
 		    Minigames.displayGamePoints(currentPoints);
-
-
+		    
+		    
 		    if(timerValue > 0) {
-			var w = window;
-			requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-			requestAnimationFrame(animloop);
+			Minigames.nextFrame(animloop);
 		    } else {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();
-		   }
+		    }
 		}
 		
-		var w = window;
-		requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-		requestAnimationFrame(animloop);
+		Minigames.nextFrame(animloop);
 		
 	    };
 	    this.games.push(game3);
-
+	    
 	    var game4 = function() {
-		Minigames.menu();
+		var currentPoints = 0;
+		var animloop = function() {
+		    if(true) {
+			Minigames.nextFrame(animloop);
+		    } else {
+			Minigames.points += currentPoints;
+			Minigames.clear();
+			Minigames.menu();
+		    }
+		}
+		
+		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game4);
-
+	    
 	    var game5 = function() {
 		Minigames.menu();
 	    };
@@ -549,6 +545,11 @@ var minigames = function() {
 	},
 	displayGamePoints: function(points) {
 	    Minigames.displayPoints("Points for this Game: ")(points);
+	},
+	nextFrame: function(loop) {
+	    var w = window;
+	    requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+	    requestAnimationFrame(loop);
 	}
     };
 };

@@ -110,23 +110,20 @@ var minigames = function() {
 
 
 		    if(player.getAttribute('cx') < Minigames.width - radius) {
-			try {
-			    window.requestAnimationFrame(animloop);
-			} catch (err) {
-			    window.webkitRequestAnimationFrame(animloop);
-			}
+			var w = window;
+			requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+			requestAnimationFrame(animloop);
+
 		    } else {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();
 		    }
 		};
-		
-		try {
-		    window.requestAnimationFrame(animloop);
-		} catch (err) {
-		    window.webkitRequestAnimationFrame(animloop);
-		}	
+	
+		var w = window;
+		requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+		requestAnimationFrame(animloop);
 	    };
 	    this.games.push(game1);
 	    var game2 = function() {
@@ -238,23 +235,19 @@ var minigames = function() {
 		    Minigames.displayGamePoints(currentPoints);
 
 		    if(!dead) {
-			try {
-			    window.requestAnimationFrame(animloop);
-			} catch (err) {
-			    window.webkitRequestAnimationFrame(animloop);
-			}
+			var w = window;
+			requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+			requestAnimationFrame(animloop);
 		    } else {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();
 		    }
 		};
-		
-		try {
-		    window.requestAnimationFrame(animloop);
-		} catch (err) {
-		    window.webkitRequestAnimationFrame(animloop);
-		}	
+	
+		var w = window;
+		requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+		requestAnimationFrame(animloop);
 	    };
 	    this.games.push(game2);
 
@@ -384,25 +377,20 @@ var minigames = function() {
 
 
 		    if(timerValue > 0) {
-			try {
-			    window.requestAnimationFrame(animloop);
-			} catch (err) {
-			    window.webkitRequestAnimationFrame(animloop);
-			}
+			var w = window;
+			requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+			requestAnimationFrame(animloop);
 		    } else {
 			Minigames.points += currentPoints;
-			//console.log(currentPoints);
 			Minigames.clear();
 			Minigames.menu();
-		    }
+		   }
 		}
-
-		try {
-		    window.requestAnimationFrame(animloop);
-		} catch (err) {
-		    window.webkitRequestAnimationFrame(animloop);
-		}	
-
+		
+		var w = window;
+		requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+		requestAnimationFrame(animloop);
+		
 	    };
 	    this.games.push(game3);
 
@@ -577,6 +565,7 @@ window.addEventListener("keydown", function(e) {
 });
 
 window.addEventListener("keyup", function(e) {
-    var index = Minigames.currentKeys.indexOf(e.keyCode);
-    Minigames.currentKeys.splice(index,1);
+    while(Minigames.currentKeys.indexOf(e.keyCode) != -1) {
+	Minigames.currentKeys.splice(Minigames.currentKeys.indexOf(e.keyCode),1);
+    }
 });

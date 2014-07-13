@@ -381,8 +381,65 @@ var minigames = function() {
 	    
 	    var game4 = function() {
 		var currentPoints = 0;
+		var timer = 500;
+		var divider = 8;
+
+		var bgPixels = new Array(Minigames.width/divider);
+		for(var i = 0; i < Minigames.width/divider; i++) {
+		    bgPixels[i] = new Array(Minigames.height/divider);
+		}
+		
+		for(var i = 0; i < Minigames.width/divider; i++) {
+		    for(var j = 0; j < Minigames.height/divider; j++) {
+			bgPixels[i][j] = 128;
+		    }
+		}
+
+		for(var index = 0; index < 300; index++) {
+		    var rad = parseInt(Math.random()*60 + 15);
+		    var cx = parseInt(Math.random()*Minigames.width);
+		    var cy = parseInt(Math.random()*Minigames.height);
+		    var mag = parseInt(Math.random()*45 + 15);
+
+
+		    for(var i = 0; i < Minigames.width/divider; i++) {
+			for(var j = 0; j < Minigames.height/divider; j++) {
+			    var dist = Math.sqrt(Math.pow(cx-i*divider,2) + Math.pow(cy-j*divider,2));
+			    if(dist < rad) {
+				bgPixels[i][j] += mag * (rad-dist) / rad;
+			    }
+			}
+		    }
+		}
+
+
+		for(var i = 0; i < Minigames.width/divider; i++) {
+		    for(var j = 0; j < Minigames.height/divider; j++) {
+			var pixel = document.createElementNS("http://www.w3.org/2000/svg","rect");
+			pixel.setAttribute("x",i*divider);
+			pixel.setAttribute("y",j*divider);
+			pixel.setAttribute("width",divider);
+			pixel.setAttribute("height",divider);
+			pixel.setAttribute("fill","#0000"+Minigames.dec2Hex(Math.min(255,bgPixels[i][j])));
+		
+			Minigames.svg.appendChild(pixel);
+		    }
+		}
+		
+
+		var gameOver = false;
+
 		var animloop = function() {
-		    if(true) {
+		    timer--;
+		    /*if(timer === 0) {
+			timer = 50;
+			var triangle = document.getElementsByTagName("polygon")[0];
+		    }*/
+		    if(timer === 0) {
+			gameOver = true;
+		    }
+
+		    if(!gameOver) {
 			Minigames.nextFrame(animloop);
 		    } else {
 			Minigames.points += currentPoints;
@@ -391,6 +448,7 @@ var minigames = function() {
 		    }
 		}
 		
+
 		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game4);

@@ -384,6 +384,18 @@ var minigames = function() {
 		var timer = 500;
 		var divider = 8;
 
+
+		var loadMessage = document.createElementNS("http://www.w3.org/2000/svg","text");
+		loadMessage.setAttribute('x',Minigames.width/2);
+		loadMessage.setAttribute('y',Minigames.height*3/4);
+		loadMessage.setAttribute('text-anchor',"middle");
+		loadMessage.setAttribute('font-size',"200px");
+		loadMessage.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
+		loadMessage.appendChild(document.createTextNode("Loading..."));
+		
+		Minigames.svg.appendChild(loadMessage);
+
+
 		var bgPixels = new Array(Minigames.width/divider);
 		for(var i = 0; i < Minigames.width/divider; i++) {
 		    bgPixels[i] = new Array(Minigames.height/divider);
@@ -413,18 +425,22 @@ var minigames = function() {
 		}
 
 
-		for(var i = 0; i < Minigames.width/divider; i++) {
-		    for(var j = 0; j < Minigames.height/divider; j++) {
-			var pixel = document.createElementNS("http://www.w3.org/2000/svg","rect");
-			pixel.setAttribute("x",i*divider);
-			pixel.setAttribute("y",j*divider);
-			pixel.setAttribute("width",divider);
-			pixel.setAttribute("height",divider);
-			pixel.setAttribute("fill","#0000"+Minigames.dec2Hex(Math.min(255,bgPixels[i][j])));
-		
-			Minigames.svg.appendChild(pixel);
+		setTimeout(function() {
+		    Minigames.svg.removeChild(loadMessage);
+		    
+		    for(var i = 0; i < Minigames.width/divider; i++) {
+			for(var j = 0; j < Minigames.height/divider; j++) {
+			    var pixel = document.createElementNS("http://www.w3.org/2000/svg","rect");
+			    pixel.setAttribute("x",i*divider);
+			    pixel.setAttribute("y",j*divider);
+			    pixel.setAttribute("width",divider);
+			    pixel.setAttribute("height",divider);
+			    pixel.setAttribute("fill","#0000"+Minigames.dec2Hex(Math.min(255,bgPixels[i][j])));
+			    
+			    Minigames.svg.appendChild(pixel);
+			}
 		    }
-		}
+		},100);
 		
 
 		var gameOver = false;
@@ -447,7 +463,6 @@ var minigames = function() {
 			Minigames.menu();
 		    }
 		}
-		
 
 		Minigames.nextFrame(animloop);
 	    };

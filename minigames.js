@@ -440,6 +440,18 @@ var minigames = function() {
 			    Minigames.svg.appendChild(pixel);
 			}
 		    }
+
+		    var triangle = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+		    var triSize = 150;
+		    var triX = Math.random()*(Minigames.width-triSize*2)+triSize;
+		    var triY = Math.random()*(Minigames.height-triSize*2)+triSize;
+
+		    triangle.setAttribute("points",triX + "," + triY + " " + (triX + Math.random()*triSize*2 - triSize) + "," + (triY + Math.random()*triSize*2 - triSize) + " " + (triX + Math.random()*triSize*2 - triSize) + "," + (triY + Math.random()*triSize*2 - triSize));
+		    triangle.setAttribute("fill","999999");
+		    triangle.setAttribute("stroke","000000");
+		    triangle.setAttribute("stroke-width","5");
+		    triangle.setAttribute("opacity","0.5");
+		    Minigames.svg.appendChild(triangle);
 		},100);
 		
 

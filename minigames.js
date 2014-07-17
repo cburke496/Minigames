@@ -384,8 +384,8 @@ var minigames = function() {
 		var maxTimerVal = 100;
 		var timer = maxTimerVal;
 		var divider = 8;
-
-
+		
+		
 		var loadMessage = document.createElementNS("http://www.w3.org/2000/svg","text");
 		loadMessage.setAttribute('x',Minigames.width/2);
 		loadMessage.setAttribute('y',Minigames.height*3/4);
@@ -395,8 +395,8 @@ var minigames = function() {
 		loadMessage.appendChild(document.createTextNode("Loading..."));
 		
 		Minigames.svg.appendChild(loadMessage);
-
-
+		
+		
 		var bgPixels = new Array(Minigames.width/divider);
 		for(var i = 0; i < Minigames.width/divider; i++) {
 		    bgPixels[i] = new Array(Minigames.height/divider);
@@ -407,14 +407,14 @@ var minigames = function() {
 			bgPixels[i][j] = 128;
 		    }
 		}
-
+		
 		for(var index = 0; index < 300; index++) {
 		    var rad = parseInt(Math.random()*60 + 15);
 		    var cx = parseInt(Math.random()*Minigames.width);
 		    var cy = parseInt(Math.random()*Minigames.height);
 		    var mag = parseInt(Math.random()*45 + 15);
-
-
+		    
+		    
 		    for(var i = 0; i < Minigames.width/divider; i++) {
 			for(var j = 0; j < Minigames.height/divider; j++) {
 			    var dist = Math.sqrt(Math.pow(cx-i*divider,2) + Math.pow(cy-j*divider,2));
@@ -424,8 +424,8 @@ var minigames = function() {
 			}
 		    }
 		}
-
-
+		
+		
 		setTimeout(function() {
 		    Minigames.svg.removeChild(loadMessage);
 		    
@@ -441,55 +441,20 @@ var minigames = function() {
 			    Minigames.svg.appendChild(pixel);
 			}
 		    }
-
-		    var makeTriangle = function(size,fill,stroke,opacity,strokeWidth) {
-			opacity = opacity || 0.75;
-			strokeWidth = strokeWidth || 3;
-
-			var triangle = document.createElementNS("http://www.w3.org/2000/svg","polygon");
-			var triX = Math.random()*(parseInt(Minigames.width)+size/4)-size/4;
-			var triY = Math.random()*(parseInt(Minigames.height)+size/4)-size/4;
-
-			var point1 = [triX+Math.random()*size,triY+Math.random()*size];
-			var point2 = [triX+Math.random()*size,triY+Math.random()*size];
-			while(Math.pow(point1[0]-point2[0],2) + Math.pow(point1[1]-point2[1],2) < Math.pow(size/2,2)) {
-			    point2 = [triX+Math.random()*size,triY+Math.random()*size];
-			}			    
-
-			var point3 = [triX+Math.random()*size,triY+Math.random()*size];
-			while(Math.pow(point1[0]-point3[0],2) + Math.pow(point1[1]-point3[1],2) < Math.pow(size/2,2) || Math.pow(point2[0]-point3[0],2) + Math.pow(point2[1]-point3[1],2) < Math.pow(size/2,2)) {
-			    point3 = [triX+Math.random()*size,triY+Math.random()*size];
-			}			    
-		    
-			triangle.setAttribute("points",point1[0] + "," + point1[1] + " " + point2[0] + "," + point2[1] + " " + point3[0] + "," + point3[1]);
-			triangle.setAttribute("fill",fill);
-			triangle.setAttribute("stroke",stroke);
-			triangle.setAttribute("stroke-width",strokeWidth);
-			triangle.setAttribute("opacity",opacity);
-			Minigames.svg.appendChild(triangle);
-		    }
-
-		    makeTriangle(250,"#999999","#000000");
-
-		    for(var i = 0; i < 50; i++) {
-			makeTriangle(250,"#990000","#220000");
-		    }
 		},100);
-		
-
 		var gameOver = false;
-
+		
 		var animloop = function() {
 		    Minigames.displayGamePoints(currentPoints);
 		    timer--;
 		    /*if(timer === 0) {
-			timer = 50;
-			var triangle = document.getElementsByTagName("polygon")[0];
-		    }*/
+		      timer = 50;
+		      var triangle = document.getElementsByTagName("polygon")[0];
+		      }*/
 		    if(timer === 0) {
 			gameOver = true;
 		    }
-
+		    
 		    if(!gameOver) {
 			Minigames.nextFrame(animloop);
 		    } else {
@@ -498,13 +463,66 @@ var minigames = function() {
 			Minigames.menu();
 		    }
 		}
-
+		
 		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game4);
 	    
 	    var game5 = function() {
-		Minigames.menu();
+		var currentPoints = 0;
+
+		var makeTriangle = function(size,fill,stroke,opacity,strokeWidth) {
+		    opacity = opacity || 0.75;
+		    strokeWidth = strokeWidth || 3;
+		    
+		    var triangle = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+		    var triX = Math.random()*(parseInt(Minigames.width)+size/4)-size/4;
+		    var triY = Math.random()*(parseInt(Minigames.height)+size/4)-size/4;
+		    
+		    var point1 = [triX+Math.random()*size,triY+Math.random()*size];
+		    var point2 = [triX+Math.random()*size,triY+Math.random()*size];
+		    while(Math.pow(point1[0]-point2[0],2) + Math.pow(point1[1]-point2[1],2) < Math.pow(size/2,2)) {
+			point2 = [triX+Math.random()*size,triY+Math.random()*size];
+		    }			    
+		    
+		    var point3 = [triX+Math.random()*size,triY+Math.random()*size];
+		    while(Math.pow(point1[0]-point3[0],2) + Math.pow(point1[1]-point3[1],2) < Math.pow(size/2,2) || Math.pow(point2[0]-point3[0],2) + Math.pow(point2[1]-point3[1],2) < Math.pow(size/2,2)) {
+			point3 = [triX+Math.random()*size,triY+Math.random()*size];
+		    }			    
+		    
+		    triangle.setAttribute("points",point1[0] + "," + point1[1] + " " + point2[0] + "," + point2[1] + " " + point3[0] + "," + point3[1]);
+		    triangle.setAttribute("fill",fill);
+		    triangle.setAttribute("stroke",stroke);
+		    triangle.setAttribute("stroke-width",strokeWidth);
+		    triangle.setAttribute("opacity",opacity);
+		    Minigames.svg.appendChild(triangle);
+		}
+		
+		for(var i = 0; i < 50; i++) {
+		    var r = Minigames.dec2Hex(Math.random()*256);
+		    var g = Minigames.dec2Hex(Math.random()*256);
+		    var b = Minigames.dec2Hex(Math.random()*256);
+		    makeTriangle(250,"#"+r+g+b,"#"+r+g+b);
+		}
+		
+
+		var timer = 100;
+
+		var animloop = function() {
+		    Minigames.displayGamePoints(currentPoints);
+		    
+		    timer--;
+		    
+		    if(timer === 0) {
+			Minigames.points += currentPoints;
+			Minigames.clear();
+			Minigames.menu();
+		    } else {
+			Minigames.nextFrame(animloop);
+		    }
+		}
+
+		Minigames.nextFrame(animloop);		
 	    };
 	    this.games.push(game5);
 	    

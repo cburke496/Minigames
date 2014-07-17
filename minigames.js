@@ -381,7 +381,8 @@ var minigames = function() {
 	    
 	    var game4 = function() {
 		var currentPoints = 0;
-		var timer = 500;
+		var maxTimerVal = 100;
+		var timer = maxTimerVal;
 		var divider = 8;
 
 
@@ -441,23 +442,45 @@ var minigames = function() {
 			}
 		    }
 
-		    var triangle = document.createElementNS("http://www.w3.org/2000/svg","polygon");
-		    var triSize = 150;
-		    var triX = Math.random()*(Minigames.width-triSize*2)+triSize;
-		    var triY = Math.random()*(Minigames.height-triSize*2)+triSize;
+		    var makeTriangle = function(size,fill,stroke,opacity,strokeWidth) {
+			opacity = opacity || 0.75;
+			strokeWidth = strokeWidth || 3;
 
-		    triangle.setAttribute("points",triX + "," + triY + " " + (triX + Math.random()*triSize*2 - triSize) + "," + (triY + Math.random()*triSize*2 - triSize) + " " + (triX + Math.random()*triSize*2 - triSize) + "," + (triY + Math.random()*triSize*2 - triSize));
-		    triangle.setAttribute("fill","999999");
-		    triangle.setAttribute("stroke","000000");
-		    triangle.setAttribute("stroke-width","5");
-		    triangle.setAttribute("opacity","0.5");
-		    Minigames.svg.appendChild(triangle);
+			var triangle = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+			var triX = Math.random()*(parseInt(Minigames.width)+size/4)-size/4;
+			var triY = Math.random()*(parseInt(Minigames.height)+size/4)-size/4;
+
+			var point1 = [triX+Math.random()*size,triY+Math.random()*size];
+			var point2 = [triX+Math.random()*size,triY+Math.random()*size];
+			while(Math.pow(point1[0]-point2[0],2) + Math.pow(point1[1]-point2[1],2) < Math.pow(size/2,2)) {
+			    point2 = [triX+Math.random()*size,triY+Math.random()*size];
+			}			    
+
+			var point3 = [triX+Math.random()*size,triY+Math.random()*size];
+			while(Math.pow(point1[0]-point3[0],2) + Math.pow(point1[1]-point3[1],2) < Math.pow(size/2,2) || Math.pow(point2[0]-point3[0],2) + Math.pow(point2[1]-point3[1],2) < Math.pow(size/2,2)) {
+			    point3 = [triX+Math.random()*size,triY+Math.random()*size];
+			}			    
+		    
+			triangle.setAttribute("points",point1[0] + "," + point1[1] + " " + point2[0] + "," + point2[1] + " " + point3[0] + "," + point3[1]);
+			triangle.setAttribute("fill",fill);
+			triangle.setAttribute("stroke",stroke);
+			triangle.setAttribute("stroke-width",strokeWidth);
+			triangle.setAttribute("opacity",opacity);
+			Minigames.svg.appendChild(triangle);
+		    }
+
+		    makeTriangle(250,"#999999","#000000");
+
+		    for(var i = 0; i < 50; i++) {
+			makeTriangle(250,"#990000","#220000");
+		    }
 		},100);
 		
 
 		var gameOver = false;
 
 		var animloop = function() {
+		    Minigames.displayGamePoints(currentPoints);
 		    timer--;
 		    /*if(timer === 0) {
 			timer = 50;

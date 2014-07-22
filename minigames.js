@@ -444,6 +444,9 @@ var minigames = function() {
 		var spawnChance = 0.02;
 		var brad = 20;
 		var bspeed = 2;
+
+		var counter = 0;
+		var pointFreq = 20;
 		
 		var animloop = function() {
 		    Minigames.displayGamePoints(currentPoints);
@@ -581,6 +584,11 @@ var minigames = function() {
 		    player.setAttribute('cx',px);
 		    player.setAttribute('cy',py);
 
+		    counter++;
+		    if(counter >= pointFreq) {
+			currentPoints++;
+			counter = 0;
+		    }
 		    
 		    if(!gameOver) {
 			Minigames.nextFrame(animloop);

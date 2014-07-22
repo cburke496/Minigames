@@ -489,6 +489,11 @@ var minigames = function() {
 		    for(var i = uBalls.length - 1; i >= 0; i--) {
 			var pos = parseInt(uBalls[i].getAttribute('cy'));
 			uBalls[i].setAttribute('cy',pos - bspeed);
+			
+			if(Math.pow(py - pos,2) + Math.pow(px - uBalls[i].getAttribute('cx'),2) < Math.pow(rad + brad,2)) {
+			    gameOver = true;
+			}
+
 			if(pos < -1 * brad) {
 			    Minigames.svg.removeChild(uBalls[i]);
 			    uBalls.splice(i,1);
@@ -497,6 +502,11 @@ var minigames = function() {
 		    for(var i = dBalls.length - 1; i >= 0; i--) {
 			var pos = parseInt(dBalls[i].getAttribute('cy'));
 			dBalls[i].setAttribute('cy',pos + bspeed);
+			
+			if(Math.pow(py - pos,2) + Math.pow(px - dBalls[i].getAttribute('cx'),2) < Math.pow(rad + brad,2)) {
+			    gameOver = true;
+			}
+			
 			if(pos > parseInt(Minigames.height) + brad) {
 			    Minigames.svg.removeChild(dBalls[i]);
 			    dBalls.splice(i,1);
@@ -505,6 +515,11 @@ var minigames = function() {
 		    for(var i = lBalls.length - 1; i >= 0; i--) {
 			var pos = parseInt(lBalls[i].getAttribute('cx'));
 			lBalls[i].setAttribute('cx',pos - bspeed);
+			
+			if(Math.pow(px - pos,2) + Math.pow(py - lBalls[i].getAttribute('cy'),2) < Math.pow(rad + brad,2)) {
+			    gameOver = true;
+			}
+
 			if(pos < -1 * brad) {
 			    Minigames.svg.removeChild(lBalls[i]);
 			    lBalls.splice(i,1);
@@ -513,6 +528,11 @@ var minigames = function() {
 		    for(var i = rBalls.length - 1; i >= 0; i--) {
 			var pos = parseInt(rBalls[i].getAttribute('cx'));
 			rBalls[i].setAttribute('cx',pos + bspeed);
+			
+			if(Math.pow(px - pos,2) + Math.pow(py - rBalls[i].getAttribute('cy'),2) < Math.pow(rad + brad,2)) {
+			    gameOver = true;
+			}
+			
 			if(pos > parseInt(Minigames.width) + brad) {
 			    Minigames.svg.removeChild(rBalls[i]);
 			    rBalls.splice(i,1);

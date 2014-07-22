@@ -435,16 +435,89 @@ var minigames = function() {
 		var py = Minigames.height/2;
 		var acc = 0.15;
 
-		/*var uBalls = [];
+		
+		var uBalls = [];
 		var dBalls = [];
 		var lBalls = [];
 		var rBalls = [];
-		*/
 
+		var spawnChance = 0.02;
+		var brad = 20;
+		var bspeed = 2;
+		
 		var animloop = function() {
 		    Minigames.displayGamePoints(currentPoints);
 
-
+		    
+		    if(Math.random() < spawnChance) {
+			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");
+			ball.setAttribute('cx',Math.random()*(Minigames.width-2*brad)+brad);
+			ball.setAttribute('cy',parseInt(Minigames.height) + brad);
+			ball.setAttribute('r',brad);
+			ball.setAttribute('fill',"#0088ff");
+			Minigames.svg.appendChild(ball);
+			uBalls.push(ball);
+		    }
+		    if(Math.random() < spawnChance) {
+			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");
+			ball.setAttribute('cx',Math.random()*(Minigames.width-2*brad)+brad);
+			ball.setAttribute('cy',-1 * brad);
+			ball.setAttribute('r',brad);
+			ball.setAttribute('fill',"#0088ff");
+			Minigames.svg.appendChild(ball);
+			dBalls.push(ball);
+		    }
+		    if(Math.random() < spawnChance) {
+			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");		
+			ball.setAttribute('cx',-1 * brad);
+			ball.setAttribute('cy',Math.random()*(Minigames.height-2*brad)+brad);
+			ball.setAttribute('r',brad);
+			ball.setAttribute('fill',"#0088ff");
+			Minigames.svg.appendChild(ball);
+			rBalls.push(ball);
+		    }
+		    if(Math.random() < spawnChance) {
+			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");		
+			ball.setAttribute('cx',parseInt(Minigames.width) + brad);
+			ball.setAttribute('cy',Math.random()*(Minigames.height-2*brad)+brad);
+			ball.setAttribute('r',brad);
+			ball.setAttribute('fill',"#0088ff");
+			Minigames.svg.appendChild(ball);
+			lBalls.push(ball);
+		    }
+		    
+		    for(var i = uBalls.length - 1; i >= 0; i--) {
+			var pos = parseInt(uBalls[i].getAttribute('cy'));
+			uBalls[i].setAttribute('cy',pos - bspeed);
+			if(pos < -1 * brad) {
+			    Minigames.svg.removeChild(uBalls[i]);
+			    uBalls.splice(i,1);
+			}
+		    }
+		    for(var i = dBalls.length - 1; i >= 0; i--) {
+			var pos = parseInt(dBalls[i].getAttribute('cy'));
+			dBalls[i].setAttribute('cy',pos + bspeed);
+			if(pos > parseInt(Minigames.height) + brad) {
+			    Minigames.svg.removeChild(dBalls[i]);
+			    dBalls.splice(i,1);
+			}
+		    }
+		    for(var i = lBalls.length - 1; i >= 0; i--) {
+			var pos = parseInt(lBalls[i].getAttribute('cx'));
+			lBalls[i].setAttribute('cx',pos - bspeed);
+			if(pos < -1 * brad) {
+			    Minigames.svg.removeChild(lBalls[i]);
+			    lBalls.splice(i,1);
+			}
+		    }
+		    for(var i = rBalls.length - 1; i >= 0; i--) {
+			var pos = parseInt(rBalls[i].getAttribute('cx'));
+			rBalls[i].setAttribute('cx',pos + bspeed);
+			if(pos > parseInt(Minigames.width) + brad) {
+			    Minigames.svg.removeChild(rBalls[i]);
+			    rBalls.splice(i,1);
+			}
+		    }
 
 		 
 		    if(Minigames.currentKeys.indexOf(37) > Minigames.currentKeys.indexOf(39) || Minigames.currentKeys.indexOf(65) > Minigames.currentKeys.indexOf(68)) {

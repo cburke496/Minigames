@@ -433,7 +433,7 @@ var minigames = function() {
 		var dy = 0;
 		var px = Minigames.width/2;
 		var py = Minigames.height/2;
-		var acc = 0.15;
+		var acc = 0.3;
 
 		
 		var uBalls = [];
@@ -441,12 +441,12 @@ var minigames = function() {
 		var lBalls = [];
 		var rBalls = [];
 
-		var spawnChance = 0.02;
+		var spawnChance = 0.06;
 		var brad = 20;
-		var bspeed = 2;
+		var bspeed = 8;
 
 		var counter = 0;
-		var pointFreq = 20;
+		var pointFreq = 2;
 		
 		var animloop = function() {
 		    Minigames.displayGamePoints(currentPoints);

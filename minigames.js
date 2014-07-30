@@ -443,6 +443,7 @@ var minigames = function() {
 
 		var spawnChance = 0.06;
 		var brad = 20;
+		var bradvary = 10;
 		var bspeed = 8;
 
 		var counter = 0;
@@ -456,8 +457,8 @@ var minigames = function() {
 			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");
 			ball.setAttribute('cx',Math.random()*(Minigames.width-2*brad)+brad);
 			ball.setAttribute('cy',parseInt(Minigames.height) + brad);
-			ball.setAttribute('r',brad);
-			ball.setAttribute('fill',"#0088ff");
+			ball.setAttribute('r',brad+Math.random()*(bradvary*2+1) - bradvary);
+			ball.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*128)+Minigames.dec2Hex(Math.random()*128 + 128)+"ff");
 			Minigames.svg.appendChild(ball);
 			uBalls.push(ball);
 		    }
@@ -465,8 +466,8 @@ var minigames = function() {
 			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");
 			ball.setAttribute('cx',Math.random()*(Minigames.width-2*brad)+brad);
 			ball.setAttribute('cy',-1 * brad);
-			ball.setAttribute('r',brad);
-			ball.setAttribute('fill',"#0088ff");
+			ball.setAttribute('r',brad+Math.random()*(bradvary*2+1) - bradvary);
+			ball.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*128)+Minigames.dec2Hex(Math.random()*128 + 128)+"ff");
 			Minigames.svg.appendChild(ball);
 			dBalls.push(ball);
 		    }
@@ -474,8 +475,8 @@ var minigames = function() {
 			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");		
 			ball.setAttribute('cx',-1 * brad);
 			ball.setAttribute('cy',Math.random()*(Minigames.height-2*brad)+brad);
-			ball.setAttribute('r',brad);
-			ball.setAttribute('fill',"#0088ff");
+			ball.setAttribute('r',brad+Math.random()*(bradvary*2+1) - bradvary);
+			ball.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*128)+Minigames.dec2Hex(Math.random()*128 + 128)+"ff");
 			Minigames.svg.appendChild(ball);
 			rBalls.push(ball);
 		    }
@@ -483,8 +484,8 @@ var minigames = function() {
 			var ball = document.createElementNS("http://www.w3.org/2000/svg","circle");		
 			ball.setAttribute('cx',parseInt(Minigames.width) + brad);
 			ball.setAttribute('cy',Math.random()*(Minigames.height-2*brad)+brad);
-			ball.setAttribute('r',brad);
-			ball.setAttribute('fill',"#0088ff");
+			ball.setAttribute('r',brad+Math.random()*(bradvary*2+1) - bradvary);
+			ball.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*128)+Minigames.dec2Hex(Math.random()*128 + 128)+"ff");
 			Minigames.svg.appendChild(ball);
 			lBalls.push(ball);
 		    }

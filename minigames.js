@@ -667,9 +667,35 @@ var minigames = function() {
 		}
 		
 
-		var timer = 100;
+		var player = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+		var px = 40;
+		var py = Minigames.height/2;
+		var psize = 20;
+		var pangle = 0;
+		var pspeed = 5;
+		player.setAttribute("points",px + "," + (py - psize/2) + " " + px + "," + (py + psize/2) + " " + (px + psize) + "," + py);
+		player.setAttribute("fill","#00dd00");
+		Minigames.svg.appendChild(player);
+
+
+		var timer = 1000;
 
 		var animloop = function() {
+		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+		    if(key === 37 || key === 65) {
+			pangle -= 5;
+		    }
+		    if(key === 39 || key === 68) {
+			pangle += 5;
+		    }
+
+		    px += pspeed * Math.cos(pangle * Math.PI / 180);
+		    py += pspeed * Math.sin(pangle * Math.PI / 180);
+
+		    player.setAttribute("points",px + "," + (py - psize/2) + " " + px + "," + (py + psize/2) + " " + (px + psize) + "," + py);
+		    player.setAttribute("transform","rotate("+pangle+ " " + (px + psize/2) + " " + py + ")");
+
+
 		    Minigames.displayGamePoints(currentPoints);
 		    
 		    timer--;

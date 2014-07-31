@@ -670,7 +670,7 @@ var minigames = function() {
 		var player = document.createElementNS("http://www.w3.org/2000/svg","polygon");
 		var px = 40;
 		var py = Minigames.height/2;
-		var psize = 20;
+		var psize = 15;
 		var pangle = 0;
 		var pspeed = 5;
 		player.setAttribute("points",px + "," + (py - psize/2) + " " + px + "," + (py + psize/2) + " " + (px + psize) + "," + py);
@@ -678,7 +678,18 @@ var minigames = function() {
 		Minigames.svg.appendChild(player);
 
 
-		var timer = 1000;
+		var border = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		border.setAttribute("fill-opacity","0");
+		border.setAttribute("x",0);
+		border.setAttribute("y",0);
+		border.setAttribute("width",Minigames.width);
+		border.setAttribute("height",Minigames.height);
+		border.setAttribute("stroke","#ff0000");
+		border.setAttribute("stroke-width","3px");
+		Minigames.svg.appendChild(border);
+
+		
+		var gameOver = false;
 
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
@@ -695,12 +706,16 @@ var minigames = function() {
 		    player.setAttribute("points",px + "," + (py - psize/2) + " " + px + "," + (py + psize/2) + " " + (px + psize) + "," + py);
 		    player.setAttribute("transform","rotate("+pangle+ " " + (px + psize/2) + " " + py + ")");
 
+		    pspeed += 0.003;
 
 		    Minigames.displayGamePoints(currentPoints);
 		    
-		    timer--;
 		    
-		    if(timer === 0) {
+		    if(px < 3 || px > Minigames.width - 4 - psize || py < 3 + psize/2 || py > Minigames.height - 4 - psize/2) {
+			gameOver = true;
+		    }
+
+		    if(gameOver) {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();

@@ -689,10 +689,38 @@ var minigames = function() {
 		Minigames.svg.appendChild(border);
 
 		
+		var obstacles = [];
+		var spawnChance = 0.05;
+
 		var gameOver = false;
 
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+
+		    var numObstacles = obstacles.length;
+		    for(var i = numObstacles - 1; i >= 0; i--) {
+			obstacles[i].setAttribute("r",parseFloat(obstacles[i].getAttribute("r")) + 0.25);
+			if(obstacles[i].getAttribute("opacity") >= 0.6) {
+			    obstacles[i].setAttribute("opacity",obstacles[i].getAttribute("opacity") - 0.005);
+			} else if(obstacles[i].getAttribute("opacity") >= 0) {
+			    obstacles[i].setAttribute("opacity",obstacles[i].getAttribute("opacity") - 0.025);
+			} else {
+			    Minigames.svg.removeChild(obstacles[i]);
+			    obstacles.splice(i,1);
+			}
+		    }
+
+		    if(Math.random() < spawnChance) {
+			var obstacle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+			obstacle.setAttribute("cx",Minigames.width * Math.random());
+			obstacle.setAttribute("cy",Minigames.height * Math.random());
+			obstacle.setAttribute("r",0);
+			obstacle.setAttribute("opacity",1);
+			obstacle.setAttribute("fill","#ff0000");
+			Minigames.svg.appendChild(obstacle);
+			obstacles.push(obstacle);
+		    }
+		    
 		    if(key === 37 || key === 65) {
 			pangle -= 5;
 		    }

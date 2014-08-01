@@ -692,6 +692,9 @@ var minigames = function() {
 		var obstacles = [];
 		var spawnChance = 0.05;
 
+		var counter = 0;
+		var pointFreq = 5;
+
 		var gameOver = false;
 
 		var animloop = function() {
@@ -699,6 +702,12 @@ var minigames = function() {
 
 		    var numObstacles = obstacles.length;
 		    for(var i = numObstacles - 1; i >= 0; i--) {
+			if(Math.pow(obstacles[i].getAttribute("cx")-px,2) +
+			   Math.pow(obstacles[i].getAttribute("cy")-py,2) <
+			   Math.pow(parseFloat(obstacles[i].getAttribute("r"))+psize/2,2)) {
+			    gameOver = true;
+			}
+
 			obstacles[i].setAttribute("r",parseFloat(obstacles[i].getAttribute("r")) + 0.25);
 			if(obstacles[i].getAttribute("opacity") >= 0.6) {
 			    obstacles[i].setAttribute("opacity",obstacles[i].getAttribute("opacity") - 0.005);
@@ -712,8 +721,16 @@ var minigames = function() {
 
 		    if(Math.random() < spawnChance) {
 			var obstacle = document.createElementNS("http://www.w3.org/2000/svg","circle");
-			obstacle.setAttribute("cx",Minigames.width * Math.random());
-			obstacle.setAttribute("cy",Minigames.height * Math.random());
+			var x = Minigames.width * Math.random();
+			var y = Minigames.height * Math.random();
+			while(Math.abs(x - px) < psize * 5 ||
+			      Math.abs(y - py) < psize * 5) {
+			    x = Minigames.width * Math.random();
+			    y = Minigames.height * Math.random();
+			}
+			
+			obstacle.setAttribute("cx",x);
+			obstacle.setAttribute("cy",y);
 			obstacle.setAttribute("r",0);
 			obstacle.setAttribute("opacity",1);
 			obstacle.setAttribute("fill","#ff0000");
@@ -735,6 +752,13 @@ var minigames = function() {
 		    player.setAttribute("transform","rotate("+pangle+ " " + (px + psize/2) + " " + py + ")");
 
 		    pspeed += 0.003;
+		    spawnChance += 0.00005;
+
+		    counter++;
+		    if(counter >= pointFreq) {
+			currentPoints++;
+			counter = 0;
+		    }
 
 		    Minigames.displayGamePoints(currentPoints);
 		    

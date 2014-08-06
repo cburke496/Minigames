@@ -781,7 +781,63 @@ var minigames = function() {
 	    this.games.push(game5);
 	    
 	    var game6 = function() {
-		Minigames.menu();
+		var alphabet = "abcdefhiklmnorstuvwxz";
+		var letters = [];
+		var fontSize = 20;
+		var bottomSpace = 30;
+
+		var deathLine = document.createElementNS("http://www.w3.org/2000/svg","line");
+		deathLine.setAttribute("x1",0);
+		deathLine.setAttribute("y1",Minigames.height - fontSize - bottomSpace);
+		deathLine.setAttribute("x2",Minigames.width);
+		deathLine.setAttribute("y2",Minigames.height - fontSize - bottomSpace);
+		deathLine.setAttribute("stroke","#000000");
+		deathLine.setAttribute("fill","#000000");
+		deathLine.setAttribute("stroke-width",1);
+		Minigames.svg.appendChild(deathLine);
+
+		var spawnChance = 0.01;
+
+		var gameOver = false;
+		var currentPoints = 0;
+
+		var animloop = function() {
+		    if(Math.random() < spawnChance) {
+			var letter = document.createElementNS("http://www.w3.org/2000/svg","text");
+			letter.setAttribute('x',Math.random()*(Minigames.width-50)+25);
+			letter.setAttribute('y',15);
+			letter.setAttribute('text-anchor',"middle");
+			letter.setAttribute('font-size',20);
+			letter.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
+			var numLetter = Math.random()*alphabet.length;
+			letter.appendChild(document.createTextNode(alphabet.substring(numLetter,numLetter+1)));
+		
+			Minigames.svg.appendChild(letter);
+			
+			letters.push(letter);
+		    }
+		    
+		    var len = letters.length;
+		    for(var i = len-1; i >= 0; i--) {
+			letters[i].setAttribute("y",parseInt(letters[i].getAttribute("y"))+1);
+			if(letters[i].getAttribute("y") > Minigames.height - fontSize - bottomSpace) {
+			    Minigames.svg.removeChild(letters[i]);
+			    letters.splice(i,1);
+			}
+		    }
+
+		    spawnChance += 0.00001;
+
+		    if(gameOver) {
+			Minigames.points += currentPoints;
+			Minigames.clear();
+			Minigames.menu();
+		    } else {
+			Minigames.nextFrame(animloop);
+		    }
+		}
+		
+		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game6);
 	    

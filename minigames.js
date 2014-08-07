@@ -781,6 +781,7 @@ var minigames = function() {
 	    this.games.push(game5);
 	    
 	    var game6 = function() {
+		var fullAlphabet = "abcdefghijklmnopqrstuvwxyz";
 		var alphabet = "abcdefhiklmnorstuvwxz";
 		var letters = [];
 		var fontSize = 20;
@@ -797,11 +798,19 @@ var minigames = function() {
 		Minigames.svg.appendChild(deathLine);
 
 		var spawnChance = 0.01;
+		var pointsPerLetter = 10;
 
 		var gameOver = false;
 		var currentPoints = 0;
+		var oldKey;
 
 		var animloop = function() {
+		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];
+		    var letterTyped = false;
+		    if(key === oldKey) {
+			letterTyped = true;
+		    }
+
 		    if(Math.random() < spawnChance) {
 			var letter = document.createElementNS("http://www.w3.org/2000/svg","text");
 			letter.setAttribute('x',Math.random()*(Minigames.width-50)+25);
@@ -817,16 +826,24 @@ var minigames = function() {
 			letters.push(letter);
 		    }
 		    
-		    var len = letters.length;
-		    for(var i = len-1; i >= 0; i--) {
+		    for(var i = 0; i < letters.length; i++) {
 			letters[i].setAttribute("y",parseInt(letters[i].getAttribute("y"))+1);
 			if(letters[i].getAttribute("y") > Minigames.height - fontSize - bottomSpace) {
+			    gameOver = true;
+			}
+
+			if(!letterTyped && letters[i].childNodes[0].nodeValue.substring(0,1) === fullAlphabet.substring(key-65,key-64)) {
 			    Minigames.svg.removeChild(letters[i]);
 			    letters.splice(i,1);
+			    letterTyped = true;
+			    currentPoints += pointsPerLetter;
+			    i--;
 			}
 		    }
 
 		    spawnChance += 0.00001;
+		    oldKey = key;
+		    Minigames.displayGamePoints(currentPoints);
 
 		    if(gameOver) {
 			Minigames.points += currentPoints;

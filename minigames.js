@@ -784,8 +784,25 @@ var minigames = function() {
 		var fullAlphabet = "abcdefghijklmnopqrstuvwxyz";
 		var alphabet = "abcdefhiklmnorstuvwxz";
 		var letters = [];
-		var fontSize = 20;
+		var fontSize = 25;
 		var bottomSpace = 30;
+
+		var background1 = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		background1.setAttribute("x",0);
+		background1.setAttribute("y",0);
+		background1.setAttribute("width",Minigames.width);
+		background1.setAttribute("height",Minigames.height - fontSize - bottomSpace);
+		background1.setAttribute("fill","#ccffdd");
+		Minigames.svg.appendChild(background1);
+
+		var background2 = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		background2.setAttribute("x",0);
+		background2.setAttribute("y",Minigames.height - fontSize - bottomSpace);
+		background2.setAttribute("width",Minigames.width);
+		background2.setAttribute("height",fontSize + bottomSpace);
+		background2.setAttribute("fill","#ffdddd");
+		Minigames.svg.appendChild(background2);
+		
 
 		var deathLine = document.createElementNS("http://www.w3.org/2000/svg","line");
 		deathLine.setAttribute("x1",0);
@@ -818,6 +835,10 @@ var minigames = function() {
 			letter.setAttribute('text-anchor',"middle");
 			letter.setAttribute('font-size',20);
 			letter.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
+			letter.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*150)+Minigames.dec2Hex(Math.random()*150)+Minigames.dec2Hex(Math.random()*150));
+			letter.setAttribute('deltax',0);
+			letter.setAttribute('vx',2);
+			letter.setAttribute('koverm',Math.random()/20);
 			var numLetter = Math.random()*alphabet.length;
 			letter.appendChild(document.createTextNode(alphabet.substring(numLetter,numLetter+1)));
 		
@@ -828,6 +849,10 @@ var minigames = function() {
 		    
 		    for(var i = 0; i < letters.length; i++) {
 			letters[i].setAttribute("y",parseInt(letters[i].getAttribute("y"))+1);
+			letters[i].setAttribute("x",parseFloat(letters[i].getAttribute("x"))+parseFloat(letters[i].getAttribute("vx")));
+			letters[i].setAttribute("deltax",parseFloat(letters[i].getAttribute("deltax"))+parseFloat(letters[i].getAttribute("vx")));
+			letters[i].setAttribute("vx",parseFloat(letters[i].getAttribute("vx"))-(letters[i].getAttribute("deltax")*letters[i].getAttribute("koverm")));
+
 			if(letters[i].getAttribute("y") > Minigames.height - fontSize - bottomSpace) {
 			    gameOver = true;
 			}

@@ -816,7 +816,7 @@ var minigames = function() {
 		Minigames.svg.appendChild(deathLine);
 
 		var spawnChance = 0.01;
-		var bombChance = 0.03;
+		var bombChance = 0.05;
 		var bombRad = 100;
 		var pointsPerLetter = 10;
 
@@ -846,7 +846,7 @@ var minigames = function() {
 			    circle.setAttribute('fill','none');
 			    circle.setAttribute('letter',letters.length-1);
 			    circle.setAttribute('cx',letter.getAttribute('x'));
-			    circle.setAttribute('cy',letter.getAttribute('y'));
+			    circle.setAttribute('cy',parseFloat(letter.getAttribute('y')) - fontSize / 4);
 			    circle.setAttribute('r',bombRad);
 			    circles.push(circle);
 			    
@@ -877,16 +877,17 @@ var minigames = function() {
 			    if(letters[i].getAttribute('fill') === "#ff0000") {
 				for(var j = 0; j < circles.length; j++) {
 				    if(parseInt(circles[j].getAttribute("letter")) === i) {
+					//TODO-Remove all letters within a radius of fontsize/4
 					Minigames.svg.removeChild(circles[j]);
 					circles.splice(j,1);
 					break;
 				    }
 				}
-			    } else {
-				for(var j = 0; j < circles.length; j++) {
-				    if(parseInt(circles[j].getAttribute("letter")) > i) {
-					circles[j].setAttribute("letter",circles[j].getAttribute("letter") - 1);
-				    }
+			    }
+
+			    for(var j = 0; j < circles.length; j++) {
+				if(parseInt(circles[j].getAttribute("letter")) > i) {
+				    circles[j].setAttribute("letter",circles[j].getAttribute("letter") - 1);
 				}
 			    }
 				
@@ -900,7 +901,7 @@ var minigames = function() {
 
 		    for(var i = 0; i < circles.length; i++) {
 			circles[i].setAttribute("cx",letters[circles[i].getAttribute("letter")].getAttribute("x"));
-			circles[i].setAttribute("cy",letters[circles[i].getAttribute("letter")].getAttribute("y"));
+			circles[i].setAttribute("cy",parseFloat(letters[circles[i].getAttribute("letter")].getAttribute("y")) - fontSize/4);
 		    }
 
 		    spawnChance += 0.00001;

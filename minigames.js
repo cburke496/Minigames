@@ -784,6 +784,7 @@ var minigames = function() {
 		var fullAlphabet = "abcdefghijklmnopqrstuvwxyz";
 		var alphabet = "abcdefhiklmnorstuvwxz";
 		var letters = [];
+		var circles = [];
 		var fontSize = 25;
 		var bottomSpace = 30;
 
@@ -815,6 +816,8 @@ var minigames = function() {
 		Minigames.svg.appendChild(deathLine);
 
 		var spawnChance = 0.01;
+		var bombChance = 0.03;
+		var bombRad = 100;
 		var pointsPerLetter = 10;
 
 		var gameOver = false;
@@ -830,12 +833,27 @@ var minigames = function() {
 
 		    if(Math.random() < spawnChance) {
 			var letter = document.createElementNS("http://www.w3.org/2000/svg","text");
+			letters.push(letter);
 			letter.setAttribute('x',Math.random()*(Minigames.width-50)+25);
 			letter.setAttribute('y',15);
 			letter.setAttribute('text-anchor',"middle");
 			letter.setAttribute('font-size',20);
 			letter.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
-			letter.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*150)+Minigames.dec2Hex(Math.random()*150)+Minigames.dec2Hex(Math.random()*150));
+			if(Math.random() < bombChance) {
+			    letter.setAttribute('fill',"#ff0000");
+			    var circle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+			    circle.setAttribute('stroke',"#ff0000");
+			    circle.setAttribute('fill','none');
+			    circle.setAttribute('letter',letters.length-1);
+			    circle.setAttribute('cx',letter.getAttribute('x'));
+			    circle.setAttribute('cy',letter.getAttribute('y'));
+			    circle.setAttribute('r',bombRad);
+			    circles.push(circle);
+			    
+			    Minigames.svg.appendChild(circle);
+			} else {
+			    letter.setAttribute('fill',"#"+Minigames.dec2Hex(Math.random()*150)+Minigames.dec2Hex(Math.random()*150)+Minigames.dec2Hex(Math.random()*150));
+			}
 			letter.setAttribute('deltax',0);
 			letter.setAttribute('vx',2);
 			letter.setAttribute('koverm',Math.random()/20);
@@ -843,8 +861,6 @@ var minigames = function() {
 			letter.appendChild(document.createTextNode(alphabet.substring(numLetter,numLetter+1)));
 		
 			Minigames.svg.appendChild(letter);
-			
-			letters.push(letter);
 		    }
 		    
 		    for(var i = 0; i < letters.length; i++) {
@@ -858,12 +874,33 @@ var minigames = function() {
 			}
 
 			if(!letterTyped && letters[i].childNodes[0].nodeValue.substring(0,1) === fullAlphabet.substring(key-65,key-64)) {
+			    if(letters[i].getAttribute('fill') === "#ff0000") {
+				for(var j = 0; j < circles.length; j++) {
+				    if(parseInt(circles[j].getAttribute("letter")) === i) {
+					Minigames.svg.removeChild(circles[j]);
+					circles.splice(j,1);
+					break;
+				    }
+				}
+			    } else {
+				for(var j = 0; j < circles.length; j++) {
+				    if(parseInt(circles[j].getAttribute("letter")) > i) {
+					circles[j].setAttribute("letter",circles[j].getAttribute("letter") - 1);
+				    }
+				}
+			    }
+				
 			    Minigames.svg.removeChild(letters[i]);
 			    letters.splice(i,1);
 			    letterTyped = true;
 			    currentPoints += pointsPerLetter;
 			    i--;
 			}
+		    }
+
+		    for(var i = 0; i < circles.length; i++) {
+			circles[i].setAttribute("cx",letters[circles[i].getAttribute("letter")].getAttribute("x"));
+			circles[i].setAttribute("cy",letters[circles[i].getAttribute("letter")].getAttribute("y"));
 		    }
 
 		    spawnChance += 0.00001;

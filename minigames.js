@@ -817,7 +817,7 @@ var minigames = function() {
 
 
 		var spawnChance = 0.01;
-		var bombChance = 0.5;
+		var bombChance = 0.05;
 		var bombRad = 100;
 		var pointsPerLetter = 10;
 
@@ -871,13 +871,21 @@ var minigames = function() {
 
 		    for(var i = 0; i < bombsToExplode.length; i++) {
 			var exploded = explode(bombsToExplode[i]);
-			for(var j = i; j < bombsToExplode.length; j++) {
+			for(var j = i+1; j < bombsToExplode.length; j++) {
 			    bombsToExplode[j]--;
-			    if(bombsToExplode[j] === exploded[0]) {
-				bombsToExplode.splice(j,1);
+			}
+			for(var j = 0; j < exploded.length; j++) {
+			    for(var k = i+1; k < bombsToExplode.length; k++) {
+				if(bombsToExplode[k] === exploded[j]) {
+				    bombsToExplode.splice(k,1);
+				    k--;
+				} else if(bombsToExplode[k] > exploded[j]) {
+				    bombsToExplode[k]--;
+				}
 			    }
 			}
-			exploded.splice(0,1);
+			bombsToExplode = bombsToExplode.splice(0,i+1).concat(exploded).concat(bombsToExplode);
+			i += exploded.length;
 		    }
 
 		    return bombsToExplode;

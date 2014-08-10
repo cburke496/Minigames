@@ -815,10 +815,74 @@ var minigames = function() {
 		deathLine.setAttribute("stroke-width",1);
 		Minigames.svg.appendChild(deathLine);
 
+
 		var spawnChance = 0.01;
-		var bombChance = 0.05;
+		var bombChance = 0.5;
 		var bombRad = 100;
 		var pointsPerLetter = 10;
+
+		var explode = function(cnum) {
+		    var bombsToExplode = [];
+		    for(var i = 0; i < letters.length; i++) {
+			if(Math.pow(parseFloat(letters[i].getAttribute("x"))-circles[cnum].getAttribute("cx"),2) +
+			   Math.pow(parseFloat(letters[i].getAttribute("y"))-circles[cnum].getAttribute("cy"),2) <
+			   Math.pow(bombRad + fontSize/4,2)) {
+			    if(letters[i].getAttribute("fill") === "#ff0000") {
+				for(var j = 0; j < circles.length; j++) {
+				    if(parseInt(circles[j].getAttribute("letter")) === i) {
+					if(j === cnum) {
+					    var bombLetterNum = i;
+					} else {
+					    bombsToExplode.push(j);
+					}
+					break;
+				    }
+				}
+			    } else {
+				Minigames.svg.removeChild(letters[i]);
+				letters.splice(i,1);
+
+				for(var j = 0; j < circles.length; j++) {
+				    if(parseInt(circles[j].getAttribute("letter")) > i) {
+					circles[j].setAttribute("letter",circles[j].getAttribute("letter") - 1);
+				    }
+				}
+
+				i--;
+			    }
+			}
+		    }
+
+		    Minigames.svg.removeChild(letters[bombLetterNum]);
+		    letters.splice(bombLetterNum,1);
+		    Minigames.svg.removeChild(circles[cnum]);
+		    circles.splice(cnum,1);
+		    for(var i = 0; i < circles.length; i++) {
+			if(parseInt(circles[i].getAttribute("letter")) > bombLetterNum) {
+			    circles[i].setAttribute("letter",circles[i].getAttribute("letter") - 1);
+			}
+		    }
+		    for(var i = 0; i < bombsToExplode.length; i++) {
+			if(bombsToExplode[i] > cnum) {
+			    bombsToExplode[i]--;
+			}
+		    }
+
+
+		    for(var i = 0; i < bombsToExplode.length; i++) {
+			var exploded = explode(bombsToExplode[i]);
+			for(var j = i; j < bombsToExplode.length; j++) {
+			    bombsToExplode[j]--;
+			    if(bombsToExplode[j] === exploded[0]) {
+				bombsToExplode.splice(j,1);
+			    }
+			}
+			exploded.splice(0,1);
+		    }
+
+		    return bombsToExplode;
+		}
+			    
 
 		var gameOver = false;
 		var currentPoints = 0;
@@ -877,22 +941,20 @@ var minigames = function() {
 			    if(letters[i].getAttribute('fill') === "#ff0000") {
 				for(var j = 0; j < circles.length; j++) {
 				    if(parseInt(circles[j].getAttribute("letter")) === i) {
-					//TODO-Remove all letters within a radius of fontsize/4
-					Minigames.svg.removeChild(circles[j]);
-					circles.splice(j,1);
+					explode(j);
 					break;
 				    }
 				}
-			    }
-
-			    for(var j = 0; j < circles.length; j++) {
-				if(parseInt(circles[j].getAttribute("letter")) > i) {
-				    circles[j].setAttribute("letter",circles[j].getAttribute("letter") - 1);
+			    } else {
+				Minigames.svg.removeChild(letters[i]);
+				letters.splice(i,1);
+				for(var j = 0; j < circles.length; j++) {
+				    if(parseInt(circles[j].getAttribute("letter")) > i) {
+					circles[j].setAttribute("letter",circles[j].getAttribute("letter") - 1);
+				    }
 				}
 			    }
 				
-			    Minigames.svg.removeChild(letters[i]);
-			    letters.splice(i,1);
 			    letterTyped = true;
 			    currentPoints += pointsPerLetter;
 			    i--;

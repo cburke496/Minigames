@@ -992,7 +992,47 @@ var minigames = function() {
 	    this.games.push(game6);
 	    
 	    var game7 = function() {
-		Minigames.menu();
+		var spaceSize = 50;
+		
+		var drawLine = function(y) {
+		    var line = document.createElementNS("http://www.w3.org/2000/svg","line");
+		    line.setAttribute("x1",0);
+		    line.setAttribute("x2",Minigames.width);
+		    line.setAttribute("y1",y);
+		    line.setAttribute("y2",y);
+		    line.setAttribute("stroke","#000000");
+		    line.setAttribute("stroke-width",2);
+		    Minigames.svg.appendChild(line);
+		}
+
+		drawLine(Minigames.height/2);
+		drawLine(Minigames.height/2 - spaceSize);
+		drawLine(Minigames.height/2 - 2*spaceSize);
+		drawLine(Minigames.height/2 + spaceSize);
+		drawLine(Minigames.height/2 + 2*spaceSize);
+
+		var hitbox = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		hitbox.setAttribute("x",spaceSize*2);
+		hitbox.setAttribute("y",Minigames.height/2 - spaceSize*3);
+		hitbox.setAttribute("width",spaceSize);
+		hitbox.setAttribute("height",spaceSize*6);
+		hitbox.setAttribute("fill","none");
+		hitbox.setAttribute("stroke","#000000");
+		hitbox.setAttribute("stroke-width",3);
+		Minigames.svg.appendChild(hitbox);
+
+
+		var gameOver = false;
+		var currentPoints = 0;
+		var animloop = function() {
+		    if(gameOver) {
+			Minigames.points += currentPoints;
+			Minigames.clear();
+			Minigames.menu();		
+		    } else {
+			Minigames.nextFrame(animloop);
+		    }
+		}
 	    };
 	    this.games.push(game7);
 	    

@@ -1021,10 +1021,104 @@ var minigames = function() {
 		hitbox.setAttribute("stroke-width",3);
 		Minigames.svg.appendChild(hitbox);
 
+		var notes = [];
+		var letters = [];
+		var dx = 2;
+		var spawnChance = 0.01;
 
 		var gameOver = false;
 		var currentPoints = 0;
 		var animloop = function() {
+		    if(Math.random() < spawnChance) {
+			var note = document.createElementNS("http://www.w3.org/2000/svg","circle");
+			var letter = document.createElementNS("http://www.w3.org/2000/svg","text");
+			note.setAttribute("r",spaceSize/2);
+			note.setAttribute("cx",parseInt(Minigames.width) + spaceSize/2);
+			note.setAttribute("stroke-width",2);
+			letter.setAttribute('text-anchor',"middle");
+			letter.setAttribute('font-size',"16px");
+			letter.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
+			
+			var noteType = parseInt(Math.random()*4);
+			if(noteType === 0) {
+			    note.setAttribute("cy",parseInt(Minigames.height/2) - 3*spaceSize/2);
+			    note.setAttribute("stroke","#000000");
+			    note.setAttribute("fill","#008800");
+			    note.setAttribute("opacity",0.75);
+			    notes.push(note);
+			    Minigames.svg.appendChild(note);
+
+			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
+			    letter.setAttribute("y",parseInt(Minigames.height/2) - 3*spaceSize/2 + 6);			    
+			    letter.appendChild(document.createTextNode("W"));
+			    letters.push(letter);
+			    Minigames.svg.appendChild(letter);
+			}
+			if(noteType === 1) {
+			    note.setAttribute("cy",parseInt(Minigames.height/2) - spaceSize/2);
+			    note.setAttribute("stroke","#000000");
+			    note.setAttribute("fill","#880000");
+			    note.setAttribute("opacity",0.75);
+			    notes.push(note);
+			    Minigames.svg.appendChild(note);
+
+			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
+			    letter.setAttribute("y",parseInt(Minigames.height/2) - spaceSize/2 + 6);			    
+			    letter.appendChild(document.createTextNode("A"));
+			    letters.push(letter);
+			    Minigames.svg.appendChild(letter);
+			}
+			if(noteType === 2) {
+			    note.setAttribute("cy",parseInt(Minigames.height/2) + spaceSize/2);
+			    note.setAttribute("stroke","#000000");
+			    note.setAttribute("fill","#888800");
+			    note.setAttribute("opacity",0.75);
+			    notes.push(note);
+			    Minigames.svg.appendChild(note);
+
+			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
+			    letter.setAttribute("y",parseInt(Minigames.height/2) + spaceSize/2 + 6);			    
+			    letter.appendChild(document.createTextNode("S"));
+			    letters.push(letter);
+			    Minigames.svg.appendChild(letter);
+			}
+			if(noteType === 3) {
+			    note.setAttribute("cy",parseInt(Minigames.height/2) + 3*spaceSize/2);
+			    note.setAttribute("stroke","#000000");
+			    note.setAttribute("fill","#000088");
+			    note.setAttribute("opacity",0.75);
+			    notes.push(note);
+			    Minigames.svg.appendChild(note);
+
+			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
+			    letter.setAttribute("y",parseInt(Minigames.height/2) + 3*spaceSize/2 + 6);			    
+			    letter.appendChild(document.createTextNode("D"));
+			    letters.push(letter);
+			    Minigames.svg.appendChild(letter);
+			}
+			
+
+		    }
+		    
+		    for(var i = 0; i < notes.length; i++) {
+			notes[i].setAttribute("cx",parseFloat(notes[i].getAttribute("cx"))-dx);
+
+			if(notes[i].getAttribute("cx") < -1 * spaceSize/2) {
+			    Minigames.svg.removeChild(notes[i]);
+			    notes.splice(i,1);
+			    i--;
+			}
+		    }
+		    for(var i = 0; i < letters.length; i++) {
+			letters[i].setAttribute("x",parseFloat(letters[i].getAttribute("x"))-dx);
+
+			if(letters[i].getAttribute("x") < -1 * spaceSize/2) {
+			    Minigames.svg.removeChild(letters[i]);
+			    letters.splice(i,1);
+			    i--;
+			}
+		    }
+
 		    if(gameOver) {
 			Minigames.points += currentPoints;
 			Minigames.clear();
@@ -1033,6 +1127,7 @@ var minigames = function() {
 			Minigames.nextFrame(animloop);
 		    }
 		}
+		Minigames.nextFrame(animloop);
 	    };
 	    this.games.push(game7);
 	    

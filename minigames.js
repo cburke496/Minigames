@@ -1023,15 +1023,103 @@ var minigames = function() {
 
 		var notes = [];
 		var letters = [];
-		var dx = 2;
+		var hitNotes = [];
+		var dx = 4;
 		var spawnChance = 0.01;
 
+		var pointsForPerfect = 20;
+
 		var timer = -2;
-		var timerReset = spaceSize/dx + 5;
+		var oldKey;
 
 		var gameOver = false;
 		var currentPoints = 0;
 		var animloop = function() {
+		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];		    
+		    
+		    if(key != oldKey) {
+			if(key === 87) {
+			    if(notes[0].getAttribute("letter") === 'W') {
+				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
+				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
+				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
+				    currentPoints += parseInt(pointsForPerfect * hitPercent);
+				    var newColor = "#"+Minigames.dec2Hex(255*(1-hitPercent))+Minigames.dec2Hex(255*hitPercent)+"00";
+				    notes[0].setAttribute("stroke",newColor);
+				    notes[0].setAttribute("fill",newColor);
+				    notes[0].setAttribute("opacity",1);
+
+				    hitNotes.push(notes[0]);
+				    notes.splice(0,1);
+				} else {
+				    gameOver = true;
+				}
+			    } else {
+				gameOver = true;
+			    }
+			}
+			if(key === 65) {
+			    if(notes[0].getAttribute("letter") === 'A') {
+				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
+				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
+				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
+				    currentPoints += parseInt(pointsForPerfect * hitPercent);
+				    var newColor = "#"+Minigames.dec2Hex(255*(1-hitPercent))+Minigames.dec2Hex(255*hitPercent)+"00";
+				    notes[0].setAttribute("stroke",newColor);
+				    notes[0].setAttribute("fill",newColor);
+				    notes[0].setAttribute("opacity",1);
+
+				    hitNotes.push(notes[0]);
+				    notes.splice(0,1);
+				} else {
+				    gameOver = true;
+				}
+			    } else {
+				gameOver = true;
+			    }
+			}
+			if(key === 83) {
+			    if(notes[0].getAttribute("letter") === 'S') {
+				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
+				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
+				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
+				    currentPoints += parseInt(pointsForPerfect * hitPercent);
+				    var newColor = "#"+Minigames.dec2Hex(255*(1-hitPercent))+Minigames.dec2Hex(255*hitPercent)+"00";
+				    notes[0].setAttribute("stroke",newColor);
+				    notes[0].setAttribute("fill",newColor);
+				    notes[0].setAttribute("opacity",1);
+
+				    hitNotes.push(notes[0]);
+				    notes.splice(0,1);
+				} else {
+				    gameOver = true;
+				}
+			    } else {
+				gameOver = true;
+			    }
+			}
+			if(key === 68) {
+			    if(notes[0].getAttribute("letter") === 'D') {
+				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
+				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
+				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
+				    currentPoints += parseInt(pointsForPerfect * hitPercent);
+				    var newColor = "#"+Minigames.dec2Hex(255*(1-hitPercent))+Minigames.dec2Hex(255*hitPercent)+"00";
+				    notes[0].setAttribute("stroke",newColor);
+				    notes[0].setAttribute("fill",newColor);
+				    notes[0].setAttribute("opacity",1);
+
+				    hitNotes.push(notes[0]);
+				    notes.splice(0,1);
+				} else {
+				    gameOver = true;
+				}
+			    } else {
+				gameOver = true;
+			    }
+			}
+		    }
+
 		    if(Math.random() < spawnChance && timer === -2) {
 			timer = -1;
 			var note = document.createElementNS("http://www.w3.org/2000/svg","circle");
@@ -1049,6 +1137,7 @@ var minigames = function() {
 			    note.setAttribute("stroke","#000000");
 			    note.setAttribute("fill","#008800");
 			    note.setAttribute("opacity",0.75);
+			    note.setAttribute("letter","W");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
@@ -1063,6 +1152,7 @@ var minigames = function() {
 			    note.setAttribute("stroke","#000000");
 			    note.setAttribute("fill","#880000");
 			    note.setAttribute("opacity",0.75);
+			    note.setAttribute("letter","A");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
@@ -1077,6 +1167,7 @@ var minigames = function() {
 			    note.setAttribute("stroke","#000000");
 			    note.setAttribute("fill","#888800");
 			    note.setAttribute("opacity",0.75);
+			    note.setAttribute("letter","S");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
@@ -1091,6 +1182,7 @@ var minigames = function() {
 			    note.setAttribute("stroke","#000000");
 			    note.setAttribute("fill","#000088");
 			    note.setAttribute("opacity",0.75);
+			    note.setAttribute("letter","D");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
@@ -1107,9 +1199,16 @@ var minigames = function() {
 		    for(var i = 0; i < notes.length; i++) {
 			notes[i].setAttribute("cx",parseFloat(notes[i].getAttribute("cx"))-dx);
 
-			if(notes[i].getAttribute("cx") < -1 * spaceSize/2) {
-			    Minigames.svg.removeChild(notes[i]);
-			    notes.splice(i,1);
+			if(parseFloat(notes[i].getAttribute("cx")) < parseFloat(hitbox.getAttribute("x"))) {
+			    gameOver = true;
+			}
+		    }
+		    for(var i = 0; i < hitNotes.length; i++) {
+			hitNotes[i].setAttribute("cx",parseFloat(hitNotes[i].getAttribute("cx"))-dx);
+
+			if(hitNotes[i].getAttribute("cx") < -1 * spaceSize/2) {
+			    Minigames.svg.removeChild(hitNotes[i]);
+			    hitNotes.splice(i,1);
 			    i--;
 			}
 		    }
@@ -1126,15 +1225,18 @@ var minigames = function() {
 		    if(timer > -2) {
 			timer++;
 		    }
-		    if(timer >= timerReset) {
+		    if(timer >= spaceSize/dx + 5) {
 			timer = -2;
 		    }
+		    
+		    oldKey = key;
 		    
 		    if(gameOver) {
 			Minigames.points += currentPoints;
 			Minigames.clear();
 			Minigames.menu();		
 		    } else {
+			Minigames.displayGamePoints(currentPoints);
 			Minigames.nextFrame(animloop);
 		    }
 		}
@@ -1222,7 +1324,7 @@ var minigames = function() {
 	    var oldCounter = 0;
 	    
 	    if(n == 0) {
-		return "0";
+		return "00";
 	    }
 	    
 	    while(n > 0) {

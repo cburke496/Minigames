@@ -1026,10 +1026,14 @@ var minigames = function() {
 		var dx = 2;
 		var spawnChance = 0.01;
 
+		var timer = -2;
+		var timerReset = spaceSize/dx + 5;
+
 		var gameOver = false;
 		var currentPoints = 0;
 		var animloop = function() {
-		    if(Math.random() < spawnChance) {
+		    if(Math.random() < spawnChance && timer === -2) {
+			timer = -1;
 			var note = document.createElementNS("http://www.w3.org/2000/svg","circle");
 			var letter = document.createElementNS("http://www.w3.org/2000/svg","text");
 			note.setAttribute("r",spaceSize/2);
@@ -1119,6 +1123,13 @@ var minigames = function() {
 			}
 		    }
 
+		    if(timer > -2) {
+			timer++;
+		    }
+		    if(timer >= timerReset) {
+			timer = -2;
+		    }
+		    
 		    if(gameOver) {
 			Minigames.points += currentPoints;
 			Minigames.clear();

@@ -993,6 +993,19 @@ var minigames = function() {
 	    
 	    var game7 = function() {
 		var spaceSize = 50;
+
+		var backgroundR = 128;
+		var backgroundG = 128;
+		var backgroundB = 128;
+		var backgroundWiggle = 5;
+
+		var background = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		background.setAttribute("x",0);
+		background.setAttribute("y",0);
+		background.setAttribute("width",Minigames.width);
+		background.setAttribute("height",Minigames.height);
+		background.setAttribute("fill","#"+Minigames.dec2Hex(backgroundR)+Minigames.dec2Hex(backgroundG)+Minigames.dec2Hex(backgroundB));
+		Minigames.svg.appendChild(background);
 		
 		var drawLine = function(y) {
 		    var line = document.createElementNS("http://www.w3.org/2000/svg","line");
@@ -1045,7 +1058,6 @@ var minigames = function() {
 		}
 
 		var notes = [];
-		//var letters = [];
 		var hitNotes = [];
 		var dx = 4;
 		var spawnChance = 0.01;
@@ -1060,6 +1072,29 @@ var minigames = function() {
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];		    
 		    
+		    backgroundR += parseInt(Math.random()*(backgroundWiggle*2+1)) - backgroundWiggle;
+		    backgroundG += parseInt(Math.random()*(backgroundWiggle*2+1)) - backgroundWiggle;
+		    backgroundB += parseInt(Math.random()*(backgroundWiggle*2+1)) - backgroundWiggle;
+		    if(backgroundR > 255) {
+			backgroundR = 255;
+		    }
+		    if(backgroundG > 255) {
+			backgroundG = 255;
+		    }
+		    if(backgroundB > 255) {
+			backgroundB = 255;
+		    }
+		    if(backgroundR < 0) {
+			backgroundR = 0;
+		    }
+		    if(backgroundG < 0) {
+			backgroundG = 0;
+		    }
+		    if(backgroundB < 0) {
+			backgroundB = 0;
+		    }
+		    background.setAttribute("fill","#"+Minigames.dec2Hex(backgroundR)+Minigames.dec2Hex(backgroundG)+Minigames.dec2Hex(backgroundB));
+
 		    if(key != oldKey && notes.length > 0) {
 			if(key === 72) {
 			    if(notes[0].getAttribute("letter") === 'H') {
@@ -1146,14 +1181,10 @@ var minigames = function() {
 		    if(Math.random() < spawnChance && timer === -2) {
 			timer = -1;
 			var note = document.createElementNS("http://www.w3.org/2000/svg","circle");
-//			var letter = document.createElementNS("http://www.w3.org/2000/svg","text");
 			note.setAttribute("r",spaceSize/2);
 			note.setAttribute("cx",parseInt(Minigames.width) + spaceSize/2);
 			note.setAttribute("stroke-width",2);
-/*			letter.setAttribute('text-anchor',"middle");
-			letter.setAttribute('font-size',"16px");
-			letter.setAttribute('font-family',"'Comic Sans MS', cursive, sans-serif");
-*/			
+
 			var noteType = parseInt(Math.random()*4);
 			if(noteType === 0) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) - 3*spaceSize/2);
@@ -1163,13 +1194,6 @@ var minigames = function() {
 			    note.setAttribute("letter","H");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
-/*
-			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
-			    letter.setAttribute("y",parseInt(Minigames.height/2) - 3*spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("H"));
-			    letters.push(letter);
-			    Minigames.svg.appendChild(letter);
-*/
 			}
 			if(noteType === 1) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) - spaceSize/2);
@@ -1179,13 +1203,6 @@ var minigames = function() {
 			    note.setAttribute("letter","J");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
-/*
-			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
-			    letter.setAttribute("y",parseInt(Minigames.height/2) - spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("J"));
-			    letters.push(letter);
-			    Minigames.svg.appendChild(letter);
-*/
 			}
 			if(noteType === 2) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) + spaceSize/2);
@@ -1195,13 +1212,6 @@ var minigames = function() {
 			    note.setAttribute("letter","K");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
-/*
-			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
-			    letter.setAttribute("y",parseInt(Minigames.height/2) + spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("K"));
-			    letters.push(letter);
-			    Minigames.svg.appendChild(letter);
-*/
 			}
 			if(noteType === 3) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) + 3*spaceSize/2);
@@ -1211,16 +1221,7 @@ var minigames = function() {
 			    note.setAttribute("letter","L");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
-/*
-			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
-			    letter.setAttribute("y",parseInt(Minigames.height/2) + 3*spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("L"));
-			    letters.push(letter);
-			    Minigames.svg.appendChild(letter);
-*/
 			}
-			
-
 		    }
 		    
 		    for(var i = 0; i < notes.length; i++) {
@@ -1239,17 +1240,7 @@ var minigames = function() {
 			    i--;
 			}
 		    }
-/*
-		    for(var i = 0; i < letters.length; i++) {
-			letters[i].setAttribute("x",parseFloat(letters[i].getAttribute("x"))-dx);
 
-			if(letters[i].getAttribute("x") < -1 * spaceSize/2) {
-			    Minigames.svg.removeChild(letters[i]);
-			    letters.splice(i,1);
-			    i--;
-			}
-		    }
-*/
 		    if(timer > -2) {
 			timer++;
 		    }

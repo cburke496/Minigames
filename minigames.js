@@ -1027,7 +1027,7 @@ var minigames = function() {
 		var dx = 4;
 		var spawnChance = 0.01;
 
-		var pointsForPerfect = 20;
+		var pointsForPerfect = 50;
 
 		var timer = -2;
 		var oldKey;
@@ -1037,9 +1037,9 @@ var minigames = function() {
 		var animloop = function() {
 		    var key = Minigames.currentKeys[Minigames.currentKeys.length-1];		    
 		    
-		    if(key != oldKey) {
-			if(key === 87) {
-			    if(notes[0].getAttribute("letter") === 'W') {
+		    if(key != oldKey && notes.length > 0) {
+			if(key === 72) {
+			    if(notes[0].getAttribute("letter") === 'H') {
 				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
 				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
 				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
@@ -1058,8 +1058,8 @@ var minigames = function() {
 				gameOver = true;
 			    }
 			}
-			if(key === 65) {
-			    if(notes[0].getAttribute("letter") === 'A') {
+			if(key === 74) {
+			    if(notes[0].getAttribute("letter") === 'J') {
 				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
 				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
 				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
@@ -1078,8 +1078,8 @@ var minigames = function() {
 				gameOver = true;
 			    }
 			}
-			if(key === 83) {
-			    if(notes[0].getAttribute("letter") === 'S') {
+			if(key === 75) {
+			    if(notes[0].getAttribute("letter") === 'K') {
 				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
 				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
 				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
@@ -1098,8 +1098,8 @@ var minigames = function() {
 				gameOver = true;
 			    }
 			}
-			if(key === 68) {
-			    if(notes[0].getAttribute("letter") === 'D') {
+			if(key === 76) {
+			    if(notes[0].getAttribute("letter") === 'L') {
 				if(notes[0].getAttribute("cx") > hitbox.getAttribute("x") &&
 				   notes[0].getAttribute("cx") < parseInt(hitbox.getAttribute("x")) + spaceSize) {
 				    var hitPercent = 1 - Math.abs(notes[0].getAttribute("cx")-hitbox.getAttribute("x")-spaceSize/2)/spaceSize*2;
@@ -1135,60 +1135,60 @@ var minigames = function() {
 			if(noteType === 0) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) - 3*spaceSize/2);
 			    note.setAttribute("stroke","#000000");
-			    note.setAttribute("fill","#008800");
+			    note.setAttribute("fill","#3300AA");
 			    note.setAttribute("opacity",0.75);
-			    note.setAttribute("letter","W");
+			    note.setAttribute("letter","H");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
 			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
 			    letter.setAttribute("y",parseInt(Minigames.height/2) - 3*spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("W"));
+			    letter.appendChild(document.createTextNode("H"));
 			    letters.push(letter);
 			    Minigames.svg.appendChild(letter);
 			}
 			if(noteType === 1) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) - spaceSize/2);
 			    note.setAttribute("stroke","#000000");
-			    note.setAttribute("fill","#880000");
+			    note.setAttribute("fill","#0022AA");
 			    note.setAttribute("opacity",0.75);
-			    note.setAttribute("letter","A");
+			    note.setAttribute("letter","J");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
 			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
 			    letter.setAttribute("y",parseInt(Minigames.height/2) - spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("A"));
+			    letter.appendChild(document.createTextNode("J"));
 			    letters.push(letter);
 			    Minigames.svg.appendChild(letter);
 			}
 			if(noteType === 2) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) + spaceSize/2);
 			    note.setAttribute("stroke","#000000");
-			    note.setAttribute("fill","#888800");
+			    note.setAttribute("fill","#008888");
 			    note.setAttribute("opacity",0.75);
-			    note.setAttribute("letter","S");
+			    note.setAttribute("letter","K");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
 			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
 			    letter.setAttribute("y",parseInt(Minigames.height/2) + spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("S"));
+			    letter.appendChild(document.createTextNode("K"));
 			    letters.push(letter);
 			    Minigames.svg.appendChild(letter);
 			}
 			if(noteType === 3) {
 			    note.setAttribute("cy",parseInt(Minigames.height/2) + 3*spaceSize/2);
 			    note.setAttribute("stroke","#000000");
-			    note.setAttribute("fill","#000088");
+			    note.setAttribute("fill","#888888");
 			    note.setAttribute("opacity",0.75);
-			    note.setAttribute("letter","D");
+			    note.setAttribute("letter","L");
 			    notes.push(note);
 			    Minigames.svg.appendChild(note);
 
 			    letter.setAttribute("x",parseInt(Minigames.width) + spaceSize/2);
 			    letter.setAttribute("y",parseInt(Minigames.height/2) + 3*spaceSize/2 + 6);			    
-			    letter.appendChild(document.createTextNode("D"));
+			    letter.appendChild(document.createTextNode("L"));
 			    letters.push(letter);
 			    Minigames.svg.appendChild(letter);
 			}
@@ -1231,6 +1231,9 @@ var minigames = function() {
 		    
 		    oldKey = key;
 		    
+		    dx += 0.001;
+		    spawnChance += 0.0001;
+
 		    if(gameOver) {
 			Minigames.points += currentPoints;
 			Minigames.clear();
